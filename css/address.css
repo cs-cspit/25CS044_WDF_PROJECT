@@ -1,0 +1,81 @@
+/* ===============================
+   ADDRESS PAGE
+================================== */
+
+.address-container{
+
+    display:grid;
+
+    grid-template-columns:1fr 1.5fr;
+
+    gap:30px;
+
+    margin-top:35px;
+
+}
+
+.address-card{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.address-card h2{
+
+    margin-bottom:20px;
+
+}
+
+.address-card h3{
+
+    margin-top:30px;
+
+    margin-bottom:10px;
+
+}
+
+.address-card p{
+
+    line-height:1.8;
+
+}
+
+.map-card{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.map-card iframe{
+
+    width:100%;
+
+    height:450px;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+@media(max-width:900px){
+
+    .address-container{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

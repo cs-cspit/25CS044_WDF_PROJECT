@@ -1,0 +1,69 @@
+.fee-summary{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    margin:35px 0;
+
+}
+
+.fee-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    border-top:5px solid #f5b400;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.fee-card h3{
+
+    color:#666;
+
+    margin-bottom:12px;
+
+}
+
+.fee-card h1{
+
+    color:#003366;
+
+    font-size:36px;
+
+}
+
+.paid{
+
+    color:green;
+
+    font-weight:600;
+
+}
+
+.pending{
+
+    color:red;
+
+    font-weight:600;
+
+}
+
+@media(max-width:900px){
+
+    .fee-summary{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

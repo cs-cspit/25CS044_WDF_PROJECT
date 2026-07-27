@@ -1,0 +1,135 @@
+/* ===============================
+   LEAVE APPLICATION PAGE
+================================= */
+
+.main{
+
+    margin-left:250px;
+
+    padding:30px;
+
+    background:#f4f7fb;
+
+    min-height:100vh;
+
+}
+
+.topbar{
+
+    background:#ffffff;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+
+}
+
+.topbar h1{
+
+    color:#003366;
+
+}
+
+.leave-container{
+
+    width:700px;
+
+    margin:30px auto;
+
+    background:#ffffff;
+
+    padding:35px;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+}
+
+.leave-container h2{
+
+    text-align:center;
+
+    color:#003366;
+
+    margin-bottom:25px;
+
+}
+
+.leave-container label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#333;
+
+}
+
+.leave-container input,
+.leave-container select,
+.leave-container textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+
+}
+
+.leave-container textarea{
+
+    resize:vertical;
+
+}
+
+.leave-container button{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0056b3;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.leave-container button:hover{
+
+    background:#003d80;
+
+}
+
+.active{
+
+    background:#f5b400;
+
+    color:#003366 !important;
+
+}

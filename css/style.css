@@ -1,0 +1,469 @@
+/* ===============================
+   GOOGLE FONT
+================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ===============================
+   ROOT VARIABLES
+================================== */
+
+:root{
+
+    --primary:#003366;
+
+    --secondary:#00509d;
+
+    --accent:#f5b400;
+
+    --background:#f5f7fb;
+
+    --white:#ffffff;
+
+    --text:#222;
+
+    --gray:#666;
+
+    --border:#d9e2ec;
+
+    --shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+/* ===============================
+   RESET
+================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:var(--background);
+
+    color:var(--text);
+
+    line-height:1.6;
+
+}
+
+/* ===============================
+   COMMON
+================================== */
+
+.container{
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:auto;
+
+}
+
+section{
+
+    padding:80px 8%;
+
+}
+
+h1,h2,h3{
+
+    color:var(--primary);
+
+}
+
+h2{
+
+    font-size:2rem;
+
+    margin-bottom:20px;
+
+}
+
+p{
+
+    color:var(--gray);
+
+}
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+a{
+
+    text-decoration:none;
+
+}
+
+/* ===============================
+   HEADER
+================================== */
+
+header{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:80px;
+
+    background:var(--white);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 7%;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+
+    z-index:1000;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.logo img{
+
+    width:55px;
+
+}
+
+.logo h2{
+
+    font-size:24px;
+
+    margin:0;
+
+}
+
+.logo p{
+
+    font-size:13px;
+
+}
+
+/* ===============================
+   NAVBAR
+================================== */
+
+nav{
+
+    display:flex;
+
+    gap:30px;
+
+}
+
+nav a{
+
+    color:var(--primary);
+
+    font-weight:500;
+
+    transition:.3s;
+
+}
+
+nav a:hover{
+
+    color:var(--accent);
+
+}
+
+/* ===============================
+   BUTTON
+================================== */
+
+button{
+
+    background:var(--accent);
+
+    color:var(--primary);
+
+    border:none;
+
+    padding:14px 32px;
+
+    border-radius:6px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ===============================
+   CARDS
+================================== */
+
+.card-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:30px;
+
+    margin-top:40px;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    border-top:5px solid var(--accent);
+
+    transition:.35s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-10px);
+
+}
+
+.card img{
+
+    width:70px;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+}
+
+.card h3{
+
+    margin-bottom:12px;
+
+}
+
+/* ===============================
+   ANNOUNCEMENTS
+================================== */
+
+.announcement-list{
+
+    margin-top:40px;
+
+}
+
+.announcement{
+
+    background:white;
+
+    margin-bottom:18px;
+
+    padding:18px 25px;
+
+    border-left:5px solid var(--accent);
+
+    border-radius:8px;
+
+    box-shadow:var(--shadow);
+
+}
+
+/* ===============================
+   CONTACT
+================================== */
+
+.contact{
+
+    text-align:center;
+
+}
+
+.contact p{
+
+    max-width:700px;
+
+    margin:20px auto;
+
+}
+
+/* ===============================
+   FOOTER
+================================== */
+
+footer{
+
+    background:#002244;
+
+    color:white;
+
+    text-align:center;
+
+    padding:40px 20px;
+
+}
+
+footer h3{
+
+    color:white;
+
+    margin-bottom:10px;
+
+}
+
+footer p{
+
+    color:#ddd;
+
+    margin:6px 0;
+
+}
+
+/* ===============================
+   TABLES
+================================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    margin-top:25px;
+
+    box-shadow:var(--shadow);
+
+}
+
+th{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:16px;
+
+}
+
+td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+    text-align:center;
+
+}
+
+/* ===============================
+   FORMS
+================================== */
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:13px;
+
+    border:1px solid var(--border);
+
+    border-radius:6px;
+
+    font-size:15px;
+
+    margin-top:8px;
+
+    margin-bottom:18px;
+
+    outline:none;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:var(--secondary);
+
+}
+
+/* ===============================
+   PAGE TITLE
+================================== */
+
+.page-title{
+
+    margin-top:100px;
+
+    text-align:center;
+
+}
+
+.page-title h1{
+
+    font-size:40px;
+
+}
+
+.page-title p{
+
+    margin-top:10px;
+
+}
