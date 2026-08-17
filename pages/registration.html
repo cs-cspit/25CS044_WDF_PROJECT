@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <style>
+        .register-container { max-width:700px; margin:40px auto; padding:24px; background:var(--panel); border-radius:8px; }
+        .form-row { display:flex; gap:12px; }
+        .form-row .field { flex:1; }
+        .error { color:var(--danger); font-size:0.9rem; margin-top:4px; }
+        .strength { height:8px; border-radius:4px; background:#eee; overflow:hidden; }
+        .strength > i { display:block; height:100%; width:0%; background:green; transition:width 0.2s ease; }
+    </style>
+</head>
+<body>
+    <header style="margin-bottom:20px;">
+        <div class="logo">
+            <img src="../images/logo.png" alt="Logo">
+            <div>
+                <h2>Student Portal</h2>
+            </div>
+        </div>
+    </header>
+
+    <main class="register-container">
+        <h2>Student Registration</h2>
+
+        <form id="registration-form" novalidate>
+            <div class="form-row">
+                <div class="field">
+                    <label for="name">Full Name</label>
+                    <input id="name" name="name" type="text" required>
+                    <div class="error" id="err-name"></div>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required>
+                    <div class="error" id="err-email"></div>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label for="mobile">Mobile Number</label>
+                <input id="mobile" name="mobile" type="tel" placeholder="10-digit mobile" required>
+                <div class="error" id="err-mobile"></div>
+            </div>
+
+            <div style="margin-top:12px;" class="form-row">
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required>
+                    <div class="strength" aria-hidden="true"><i id="strength-bar"></i></div>
+                    <div class="error" id="err-password"></div>
+                </div>
+                <div class="field">
+                    <label for="confirm">Confirm Password</label>
+                    <input id="confirm" name="confirm" type="password" required>
+                    <div class="error" id="err-confirm"></div>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;" class="form-row">
+                <div class="field">
+                    <label for="course">Course</label>
+                    <select id="course" name="course" required>
+                        <option value="">Select course</option>
+                        <option>Computer Engineering</option>
+                        <option>Information Technology</option>
+                        <option>Electronics</option>
+                    </select>
+                    <div class="error" id="err-course"></div>
+                </div>
+                <div class="field">
+                    <label for="year">Year</label>
+                    <select id="year" name="year" required>
+                        <option value="">Select year</option>
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option>4th Year</option>
+                    </select>
+                    <div class="error" id="err-year"></div>
+                </div>
+            </div>
+
+            <fieldset style="margin-top:12px; border:none; padding:0;">
+                <legend style="font-weight:600;">Gender</legend>
+                <label><input type="radio" name="gender" value="male"> Male</label>
+                <label><input type="radio" name="gender" value="female"> Female</label>
+                <label><input type="radio" name="gender" value="other"> Other</label>
+                <div class="error" id="err-gender"></div>
+            </fieldset>
+
+            <div style="margin-top:12px;">
+                <label><input type="checkbox" id="terms"> I accept the terms and conditions</label>
+                <div class="error" id="err-terms"></div>
+            </div>
+
+            <div style="margin-top:16px; display:flex; gap:12px;">
+                <button type="submit">Register</button>
+                <a href="../index.html"><button type="button">Cancel</button></a>
+            </div>
+        </form>
+    </main>
+
+    <script src="../js/registration.js"></script>
+</body>
+</html>

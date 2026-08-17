@@ -182,6 +182,8 @@
     font-size:15px;
 
     margin-bottom:20px;
+    
+    color:#333;
 
 }
 
@@ -241,7 +243,7 @@
 
 .about{
 
-    background:white;
+    background:var(--white);
 
     text-align:center;
 
@@ -265,7 +267,7 @@
 
 .services{
 
-    background:#f5f7fb;
+    background:var(--background);
 
     text-align:center;
 
@@ -277,7 +279,7 @@
 
 .announcements{
 
-    background:white;
+    background:var(--white);
 
 }
 

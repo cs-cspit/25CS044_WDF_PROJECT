@@ -6,17 +6,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Portal</title>
+    <title>StudentHub | Home</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/public-pages.css">
+
+    <script>
+        (function(){
+            try {
+                var theme = localStorage.getItem('site-theme');
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
 
 </head>
 
 <body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <header>
 
@@ -26,7 +42,7 @@
 
         <div>
 
-            <h2>Student Portal</h2>
+            <h2>StudentHub</h2>
 
             <p>Academic Information System</p>
 
@@ -34,21 +50,28 @@
 
     </div>
 
-    <nav>
+    <button id="hamburger" class="hamburger" aria-label="Open navigation" aria-expanded="false">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
 
-        <a href="#">Home</a>
-
-        <a href="#about">About</a>
-
+    <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="pages/about.html">About</a>
         <a href="#services">Services</a>
-
         <a href="#announcements">Announcements</a>
-
-        <a href="#contact">Contact</a>
-
+        <a href="pages/faq.html">FAQ</a>
+        <a href="pages/contact.html">Contact</a>
+        <a href="pages/registration.html">Register</a>
+        <a href="pages/admin.html">Admin</a>
     </nav>
 
+    <button id="theme-toggle" class="theme-toggle" aria-pressed="false" title="Toggle light/dark theme">🌙</button>
+
 </header>
+
+<main id="main-content">
 
 <section class="hero">
 
@@ -104,11 +127,10 @@
 
             </form>
 
-            <a href="#">
-
-                Forgot Password?
-
-            </a>
+            <div style="margin-top:12px; display:flex; gap:12px; justify-content:center;">
+                <a href="#">Forgot Password?</a>
+                <a href="pages/registration.html">Register</a>
+            </div>
 
         </div>
 
@@ -122,6 +144,11 @@
 
         <h2>About Student Portal</h2>
 
+        <div id="notification-banner" class="notification-banner">
+            <p>📢 New update: Semester registration deadline extended to June 10.</p>
+            <button id="notification-close" aria-label="Close notification">×</button>
+        </div>
+
         <p>
 
             This portal allows students to access academic information,
@@ -134,10 +161,51 @@
 
 </section>
 
+<section id="address" class="address" style="text-align:center; padding: 50px 20px; background: var(--background);">
+    <div class="container">
+        <h2>Address</h2>
+        <p>CHARUSAT CAMPUS</p>
+        <button id="open-address-modal">View Full Address</button>
+    </div>
+</section>
+
+<section id="campus-slider" class="campus-slider" style="text-align:center; padding: 50px 20px; background: var(--background);">
+    <div class="container">
+        <h2>Campus Gallery</h2>
+        <div class="slider-wrapper">
+            <div class="slider-slide active">
+                <img src="images/charusat-university-1.webp" alt="CHARUSAT University campus 1">
+            </div>
+            <div class="slider-slide">
+                <img src="images/charusat-university-2.webp" alt="CHARUSAT University campus 2">
+            </div>
+            <div class="slider-slide">
+                <img src="images/charusat-university-3.webp" alt="CHARUSAT University campus 3">
+            </div>
+            <button class="slider-prev" aria-label="Previous slide">&#10094;</button>
+            <button class="slider-next" aria-label="Next slide">&#10095;</button>
+        </div>
+        <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Slide 1"></button>
+            <button class="slider-dot" aria-label="Slide 2"></button>
+            <button class="slider-dot" aria-label="Slide 3"></button>
+        </div>
+    </div>
+</section>
+
+<div id="address-modal" class="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" id="close-address-modal">×</button>
+        <h3>University Address</h3>
+        <p>CHARUSAT Campus, Off Nadiad-Petlad Highway, Changa - 38842100<br>
+           Near Central Library, Academic Campus Area.</p>
+        <p>+91 2697 265021<br>
+           Email: support@charusat.edu.in</p>
+    </div>
+</div>
+
 <section id="services" class="services">
-
     <h2>Quick Access</h2>
-
     <div class="card-container">
 
         <div class="card">
@@ -212,6 +280,65 @@
 
 </section>
 
+<section id="campus-slider-2" class="campus-slider" style="padding: 50px 20px; text-align: center; background: var(--background);">
+    <div class="container">
+        <h2>Campus Gallery</h2>
+        <div class="slider-wrapper">
+            <div class="slider-slide active">
+                <img src="images/charusat-university-1.webp" alt="CHARUSAT University campus 1">
+            </div>
+            <div class="slider-slide">
+                <img src="images/charusat-university-2.webp" alt="CHARUSAT University campus 2">
+            </div>
+            <div class="slider-slide">
+                <img src="images/charusat-university-3.webp" alt="CHARUSAT University campus 3">
+            </div>
+            <button class="slider-prev">&#10094;</button>
+            <button class="slider-next">&#10095;</button>
+        </div>
+        <div class="slider-dots">
+            <button class="slider-dot active"></button>
+            <button class="slider-dot"></button>
+            <button class="slider-dot"></button>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="faq" style="padding: 50px 20px; text-align: center;">
+
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-list" style="max-width: 800px; margin: 0 auto; text-align: left;">
+
+        <div class="faq-item" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">How do I reset my portal password?</h3>
+            <p>You can click on the "Forgot Password" link on the login page and follow the instructions sent to your registered email address.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">Where can I view my attendance?</h3>
+            <p>Once logged in, navigate to the "Attendance" section from the dashboard to view your complete attendance records.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">How do I pay my semester fees online?</h3>
+            <p>Go to the "Fees" section in your dashboard, select the pending fee, and click on "Pay Now" to complete the payment via our secure gateway.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">What should I do if my timetable is incorrect?</h3>
+            <p>Please contact your department coordinator or the university administration immediately to report any discrepancies in your timetable.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">Can I apply for leave through the portal?</h3>
+            <p>Yes, you can apply for leave by going to the "Leave Applications" tab on your dashboard and filling out the required details.</p>
+        </div>
+
+    </div>
+
+</section>
+
 <section id="contact" class="contact">
 
     <h2>Need Help?</h2>
@@ -223,19 +350,19 @@
 
     </p>
 
-    <button>
-
-        Contact Support
-
-    </button>
+    <a href="pages/contact.html">
+        <button type="button">Contact Support</button>
+    </a>
 
 </section>
+
+</main>
 
 <footer>
 
     <div class="footer-content">
 
-        <h3>Student Portal</h3>
+        <h3>StudentHub</h3>
 
         <p>
 
@@ -245,7 +372,7 @@
 
         <p>
 
-            © 2026 Student Portal
+            © 2026 StudentHub
 
         </p>
 
@@ -253,6 +380,11 @@
 
 </footer>
 
+    <script src="js/faq.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/notification.js"></script>
+    <script src="js/ui.js"></script>
 </body>
 
 </html>

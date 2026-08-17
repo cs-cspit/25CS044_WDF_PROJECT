@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback | StudentHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/public-pages.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <aside class="sidebar" aria-label="Dashboard navigation">
+        <div class="logo">
+            <img src="../images/logo.png" alt="StudentHub logo">
+            <h2>StudentHub</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="attendance.html">Attendance</a></li>
+                <li><a href="timetable.html">Timetable</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="subject-information.html">Subjects</a></li>
+                <li><a href="leave-application.html">Leave</a></li>
+                <li><a href="event-entry.html">Events</a></li>
+                <li><a href="feedback.html" class="active" aria-current="page">Feedback</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="address.html">Address</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main" id="main-content">
+        <header class="topbar">
+            <h1>Submit Feedback</h1>
+        </header>
+
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="padding:0 0 16px;">
+            <a href="dashboard.html">Dashboard</a> &rsaquo; Feedback
+        </nav>
+
+        <section class="welcome">
+            <h2>We value your opinion</h2>
+            <p>Help us improve StudentHub by sharing your experience.</p>
+        </section>
+
+        <form class="feedback-form" id="feedback-form" action="#" method="post" novalidate>
+            <label for="feedback-category">Category</label>
+            <select id="feedback-category" name="category" required>
+                <option value="">Select category</option>
+                <option>Portal Usability</option>
+                <option>Academic Services</option>
+                <option>Events</option>
+                <option>Technical Issue</option>
+                <option>Other</option>
+            </select>
+
+            <label for="feedback-rating">Rating</label>
+            <select id="feedback-rating" name="rating" required>
+                <option value="">Select rating</option>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Very Poor</option>
+            </select>
+
+            <label for="feedback-message">Your Feedback</label>
+            <textarea id="feedback-message" name="message" rows="6" required placeholder="Describe your experience or suggestion..."></textarea>
+
+            <label>
+                <input type="checkbox" id="feedback-anonymous" name="anonymous">
+                Submit anonymously
+            </label>
+
+            <button type="submit" style="margin-top:16px;">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('feedback-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Thank you! Your feedback has been recorded (demo).');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

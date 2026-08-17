@@ -1,124 +1,139 @@
-# Student Portal
+# StudentHub Portal
 
-A static, multi-page front-end for a university **Student Portal** — an academic information system where students log in and access their dashboard, attendance, timetable, fees, subjects, leave applications, events, calendar, campus address, and account settings.
+A semester-long **StudentHub** web portal — a static, multi-page front-end for a university academic information system. Built for WDFW lab Practicals 1–5 using HTML5, CSS3, and JavaScript.
 
-## Pages
+## Lab Practical Coverage
 
-| Page | File | Description |
-|---|---|---|
-| Landing / Login | `index.html` | Hero banner + Student ID/password login form |
-| Dashboard | `pages/dashboard.html` | Profile card, stats (attendance, CGPA, credits, fees due), today's timetable, announcements, quick-access cards |
-| Attendance | `pages/attendance.html` | Per-subject attendance table (conducted/attended/%/status) |
-| Timetable | `pages/timetable.html` | Weekly Mon–Fri class schedule |
-| Fees | `pages/fees.html` | Total/paid/pending summary cards + semester-wise payment table |
-| Subjects | `pages/subject-information.html` | Subject code, name, faculty, credits table |
-| Leave Application | `pages/leave-application.html` | Form to request leave (type, dates, reason) |
-| Events | `pages/event-entry.html` | Campus events table (date, venue, status) |
-| Calendar | `pages/calendar.html` | Academic calendar / key dates table |
-| Address | `pages/address.html` | Campus contact info + embedded Google Map |
-| Settings | `pages/settings.html` | Update name, email, mobile, password |
-| Logout | `pages/logout.html` | JS `confirm()` on load → redirects to `../index.html`, or goes back if cancelled |
+| Practical | Topic | Status | Key Files |
+|-----------|-------|--------|-----------|
+| **P1** | Requirements, sitemap, wireframe, GitHub setup | Done | `docs/REQUIREMENTS.md`, `docs/SITEMAP.md`, `docs/WIREFRAME-NOTES.md` |
+| **P2** | Semantic HTML5 + accessibility (10+ pages) | Done | All `pages/*.html`, `docs/ACCESSIBILITY-CHECKLIST.md` |
+| **P3** | Responsive CSS Grid/Flexbox | Done | `css/responsive.css`, page-specific CSS |
+| **P4** | JS DOM, events, interactivity | Done | `js/faq.js`, `js/modal.js`, `js/slider.js`, `js/ui.js`, `js/notification.js` |
+| **P5** | Registration form + validation | Done | `pages/registration.html`, `js/registration.js` |
 
-All dashboard pages share a fixed left **sidebar** (logo + full nav list) and a **topbar** with the page title; `dashboard.html` additionally shows a profile block in its topbar.
+## Required Pages (Syllabus)
+
+| Page | File | Role |
+|------|------|------|
+| Home | `index.html` | Guest |
+| About | `pages/about.html` | Guest |
+| Register | `pages/registration.html` | Guest |
+| Login | `index.html#login` | Guest |
+| Dashboard | `pages/dashboard.html` | Student |
+| Events | `pages/event-entry.html` | Student |
+| Profile | `pages/profile.html` | Student |
+| Contact | `pages/contact.html` | Guest |
+| Admin | `pages/admin.html` | Admin |
+| FAQ | `pages/faq.html` | Guest |
+| Feedback | `pages/feedback.html` | Student |
+
+**Additional pages:** Attendance, Timetable, Fees, Subjects, Leave, Calendar, Address, Settings, Logout.
+
+## User Roles
+
+- **Guest** — Home, About, FAQ, Contact, Register, Login
+- **Student** — Dashboard, Profile, academic modules, Feedback, Settings
+- **Admin** — Admin panel for registrations and event approval
 
 ## Project Structure
 
 ```
 .
-├── README.md                       # Project documentation (this file)
-├── index.html
+├── README.md
+├── index.html                      # Home + Login
+├── docs/
+│   ├── REQUIREMENTS.md             # Functional requirements (P1)
+│   ├── SITEMAP.md                  # Site hierarchy (P1)
+│   ├── WIREFRAME-NOTES.md          # Low-fidelity wireframe guide (P1)
+│   └── ACCESSIBILITY-CHECKLIST.md  # A11y checklist (P2)
 ├── css/
-│   ├── style.css                # Global variables, reset, header/footer, base tables/forms
-│   ├── login.css                 # Hero, login card, about/services/announcements (index page)
-│   ├── responsive.css            # Breakpoints (shared across most pages)
-│   ├── dashboard.css              # Sidebar, topbar, profile, stats, dashboard grid + logout-box
-│   ├── attendance.css             # Self-contained sidebar/topbar/table styles + attendance table
-│   ├── timetable.css              # Weekly timetable table box
-│   ├── fees.css                    # Fee summary cards (paid/pending)
-│   ├── leave.css                   # Leave application form
-│   ├── calendar.css                # Academic calendar table
-│   ├── event.css                    # Events table
-│   ├── address.css                  # Address card + map iframe
-│   ├── subject.css                   # Subjects page (currently empty)
-│   └── settings.css                  # Account settings form
+│   ├── style.css                   # Global variables, reset, components
+│   ├── login.css                   # Hero, login card (home page)
+│   ├── responsive.css              # Mobile-first breakpoints (P3)
+│   ├── public-pages.css            # About, FAQ, Contact, Profile, Admin
+│   ├── dashboard.css               # Sidebar, topbar, dashboard grid
+│   └── [page-specific CSS files]
+├── js/
+│   ├── faq.js                      # Collapsible FAQ (P4)
+│   ├── modal.js                    # Address modal popup (P4)
+│   ├── slider.js                   # Campus image slider (P4)
+│   ├── notification.js             # Dismissible banner (P4)
+│   ├── ui.js                       # Hamburger + theme toggle + localStorage (P4)
+│   └── registration.js             # Form validation + regex (P5)
 ├── images/
-│   ├── logo.png
-│   ├── campus.png                 # Hero background (index.html)
-│   ├── profile.png                 # Dashboard profile avatar
-│   └── icons/
-│       ├── address.png
-│       ├── attendance.png
-│       ├── calendar.png
-│       ├── event.png
-│       ├── fees.png
-│       ├── leave.png
-│       ├── logout.png
-│       ├── settings.png
-│       ├── subject.png
-│       └── timetable.png
 └── pages/
-    ├── dashboard.html
-    ├── attendance.html
-    ├── timetable.html
-    ├── fees.html
-    ├── subject-information.html
-    ├── leave-application.html
-    ├── event-entry.html
-    ├── calendar.html
-    ├── address.html
-    ├── settings.html
-    └── logout.html
+    ├── about.html, contact.html, faq.html
+    ├── registration.html, profile.html, feedback.html, admin.html
+    └── [dashboard module pages]
 ```
 
 ## Getting Started
 
-1. Clone or download this repository, keeping the `css/`, `images/`, and `pages/` folders alongside `index.html`.
-2. Open `index.html` in your browser — static site, no build step required.
-3. Log in with any values (the form currently posts to `pages/dashboard.html` with no real authentication) to browse the dashboard pages.
+1. Clone or download this repository.
+2. Open `index.html` in a browser — no build step required.
+3. Login with any credentials (demo) → redirects to dashboard.
 
 ```bash
-# Optional: serve locally
+# Optional local server
 npx serve .
-# or
-python3 -m http.server
 ```
+
+## Key Features
+
+### Practical 4 — JavaScript Interactivity
+- Collapsible FAQ accordion
+- Modal popup for address details
+- Image/content slider with dots and arrows
+- Dismissible notification banner
+- Hamburger menu (mobile)
+- Light/dark theme switcher with `localStorage`
+
+### Practical 5 — Registration Validation
+- Fields: name, email, mobile, password, confirm password, course, year, gender, terms
+- Regex validation for name, email, mobile
+- Password strength meter
+- Real-time validation on blur
+- Accessible error messages near each field
 
 ## Design System
 
-CSS custom properties defined in `style.css`:
+CSS custom properties in `style.css`:
 
-| Variable | Value | Use |
-|---|---|---|
-| `--primary` | `#003366` | Sidebar, headings, buttons |
-| `--secondary` | `#00509d` | Accents, focus states |
-| `--accent` | `#f5b400` | Highlights, active nav links, hover states |
-| `--background` | `#f5f7fb` | Page background |
-| `--white` | `#ffffff` | Cards, panels |
-| `--text` | `#222` | Body text |
-| `--gray` | `#666` | Secondary text |
-| `--border` | `#d9e2ec` | Input borders |
-| `--shadow` | `0 8px 25px rgba(0,0,0,.08)` | Card elevation |
+| Variable | Use |
+|----------|-----|
+| `--primary` | Sidebar, headings, buttons |
+| `--secondary` | Accents, focus states |
+| `--accent` | Highlights, active nav |
+| `--background` | Page background |
 
-## Known Issues
+## Git Commit Strategy (Per Practical)
 
-- **Broken nav link:** `pages/leave-application.html` links to `attendence.html` (typo) instead of `attendance.html`.
-- **`logout.html` has no stylesheet links**, so the `.logout-box` styles defined in `dashboard.css` never apply to it — the page currently just fires a JS `confirm()` on load with a blank body.
-- **Inconsistent sidebar markup:** some pages include the logo `<img>` in the sidebar (`address.html`, `dashboard.html`, `fees.html`, etc.) while others (`calendar.html`, `event-entry.html`) only render the `<h2>` title, so the sidebar logo is missing on those pages.
-- **Inconsistent "active" nav highlighting:** `dashboard.html` and `address.html` don't mark any sidebar link as `active`, unlike `attendance.html`, `calendar.html`, `event-entry.html`, `leave-application.html`, and `settings.html`.
-- **Duplicated styles:** `attendance.css` and `calendar.css` redefine their own sidebar/topbar/table rules (with a slightly different palette, `#0b3b70` vs `#003366`) instead of relying on the shared `dashboard.css`, causing minor visual inconsistency between pages.
-- **No real backend:** login, leave application, settings, and fee data are all static/hardcoded — no form actually submits or persists data.
+```bash
+git commit -m "P1: Add requirements, sitemap, wireframe notes, README"
+git commit -m "P2: Add semantic HTML pages with accessibility structure"
+git commit -m "P3: Add responsive CSS Grid and Flexbox layouts"
+git commit -m "P4: Add JS interactivity (FAQ, modal, slider, theme)"
+git commit -m "P5: Add registration form with regex validation"
+```
+
+## Key Questions — Quick Answers (Viva Prep)
+
+1. **URL parts:** Protocol + domain + path + optional fragment/query (`https://site.edu/pages/dashboard.html#stats`)
+2. **HTML in browser:** Parse → build DOM → fetch CSS/JS/images → render → execute scripts
+3. **Page navigation:** Relative links between HTML files; sidebar for dashboard, top nav for public pages
+4. **GitHub commits:** One meaningful commit per practical with descriptive messages
 
 ## Tech Stack
 
-- **HTML5**
-- **CSS3** (custom stylesheets, CSS Grid/Flexbox, CSS variables, no framework)
-- **Vanilla JavaScript** (inline `confirm()`/redirect on the logout page)
-- **Google Fonts** — [Poppins](https://fonts.google.com/specimen/Poppins)
+- HTML5 (semantic elements)
+- CSS3 (Grid, Flexbox, media queries, CSS variables)
+- JavaScript ES6+ (DOM, events, localStorage, regex)
+- Google Fonts — Poppins
 
+## Author
 
-## License
-25cs044
-
+25CS044
 
 ---
-© 2026 Student Portal — Empowering Students Through Technology
+© 2026 StudentHub — Empowering Students Through Technology

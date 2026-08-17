@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | StudentHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/public-pages.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <aside class="sidebar" aria-label="Dashboard navigation">
+        <div class="logo">
+            <img src="../images/logo.png" alt="StudentHub logo">
+            <h2>StudentHub</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="profile.html" class="active" aria-current="page">Profile</a></li>
+                <li><a href="attendance.html">Attendance</a></li>
+                <li><a href="timetable.html">Timetable</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="subject-information.html">Subjects</a></li>
+                <li><a href="leave-application.html">Leave</a></li>
+                <li><a href="event-entry.html">Events</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="address.html">Address</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main" id="main-content">
+        <header class="topbar">
+            <h1>My Profile</h1>
+        </header>
+
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="padding:0 0 16px;">
+            <a href="dashboard.html">Dashboard</a> &rsaquo; Profile
+        </nav>
+
+        <section class="welcome">
+            <h2>Student Information</h2>
+            <p>View your registered academic profile. To edit details, go to Settings.</p>
+        </section>
+
+        <article class="profile-card">
+            <img src="../images/profile.png" alt="Profile photo of John Doe">
+            <div class="profile-details">
+                <dl>
+                    <dt>Full Name</dt>
+                    <dd>John Doe</dd>
+                    <dt>Student ID</dt>
+                    <dd>23CS001</dd>
+                    <dt>Email</dt>
+                    <dd>john.doe@charusat.edu.in</dd>
+                    <dt>Mobile</dt>
+                    <dd>+91 9876543210</dd>
+                    <dt>Course</dt>
+                    <dd>Computer Engineering</dd>
+                    <dt>Year</dt>
+                    <dd>3rd Year</dd>
+                    <dt>CGPA</dt>
+                    <dd>8.84</dd>
+                    <dt>Attendance</dt>
+                    <dd>91%</dd>
+                </dl>
+                <p style="margin-top:16px;">
+                    <a href="settings.html"><button type="button">Edit Profile</button></a>
+                </p>
+            </div>
+        </article>
+    </div>
+</body>
+</html>
