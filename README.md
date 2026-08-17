@@ -115,15 +115,6 @@ CSS custom properties defined in `style.css`:
 - **Vanilla JavaScript** (inline `confirm()`/redirect on the logout page)
 - **Google Fonts** — [Poppins](https://fonts.google.com/specimen/Poppins)
 
-## Roadmap / TODO
-
-- [ ] Fix the `attendence.html` → `attendance.html` typo in `leave-application.html`
-- [ ] Add stylesheet links to `logout.html` so the logout confirmation card renders correctly
-- [ ] Standardize sidebar markup (logo present, active-state) across all pages
-- [ ] Finish `subject.css` styling for the Subjects page
-- [ ] Consolidate `attendance.css`/`calendar.css` sidebar/topbar/table rules into shared `dashboard.css` styles
-- [ ] Wire up login, leave application, and settings forms to a real backend/auth system
-- [ ] Implement "Forgot Password?" flow on `index.html`
 
 ## License
 25cs044
