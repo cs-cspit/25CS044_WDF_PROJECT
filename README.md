@@ -131,7 +131,13 @@ git commit -m "P5: Add registration form with regex validation"
 - JavaScript ES6+ (DOM, events, localStorage, regex)
 - Google Fonts — Poppins
 
+<<<<<<< HEAD
 ## Author
+=======
+
+## License
+25cs044
+>>>>>>> a8052a66444882109411420e83b39a911f692ca9
 
 25CS044
 
