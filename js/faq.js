@@ -13,16 +13,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
         question.style.cursor = 'pointer';
         question.setAttribute('aria-expanded', 'false');
+        question.setAttribute('role', 'button');
+        question.setAttribute('tabindex', '0');
 
-        question.addEventListener('click', function () {
+        function toggleFAQ() {
             const isOpen = item.classList.toggle('open');
-
             if (isOpen) {
                 answer.style.maxHeight = answer.scrollHeight + 'px';
                 question.setAttribute('aria-expanded', 'true');
             } else {
                 answer.style.maxHeight = '0';
                 question.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        question.addEventListener('click', toggleFAQ);
+
+        question.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFAQ();
             }
         });
     });

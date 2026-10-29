@@ -216,37 +216,123 @@ nav a:hover{
 /* Hamburger (mobile) and theme toggle */
 .hamburger{
     display:none;
-    background:transparent;
-    border:none;
-    width:44px;
-    height:44px;
+    background:rgba(10,102,255,0.08);
+    border:1px solid rgba(10,102,255,0.18);
+    border-radius:8px;
+    width:42px !important;
+    height:42px !important;
+    padding:0 !important;
+    margin:0 !important;
     align-items:center;
     justify-content:center;
     cursor:pointer;
+    z-index:1700;
+    position:relative;
+    box-shadow:none !important;
 }
-.hamburger-box{display:inline-block; width:24px; height:16px; position:relative}
-.hamburger-inner{position:absolute; top:50%; left:0; right:0; height:2px; background:var(--primary); border-radius:2px; transform:translateY(-50%)}
-.hamburger-inner::before, .hamburger-inner::after{content:''; position:absolute; left:0; right:0; height:2px; background:var(--primary); border-radius:2px; transition: transform .22s ease, opacity .22s ease}
-.hamburger-inner::before{top:-7px}
-.hamburger-inner::after{bottom:-7px}
+
+:where(html.dark) .hamburger, :where(body.dark) .hamburger{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+}
+
+.hamburger:hover{
+    background:rgba(10,102,255,0.15);
+}
+:where(html.dark) .hamburger:hover{
+    background:rgba(255,255,255,0.15);
+}
+
+.hamburger-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:22px;
+    height:18px;
+    position:relative;
+}
+
+.hamburger-inner{
+    position:absolute;
+    width:100%;
+    height:3px;
+    background:#0a66ff;
+    border-radius:3px;
+    transition:transform .22s ease, opacity .22s ease, background-color .22s ease;
+}
+
+:where(html.dark) .hamburger-inner{
+    background:#60a5fa;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after{
+    content:'';
+    position:absolute;
+    left:0;
+    width:100%;
+    height:3px;
+    background:#0a66ff;
+    border-radius:3px;
+    transition:transform .22s ease, opacity .22s ease;
+}
+
+:where(html.dark) .hamburger-inner::before,
+:where(html.dark) .hamburger-inner::after{
+    background:#60a5fa;
+}
+
+.hamburger-inner::before{
+    top:-7px;
+}
+
+.hamburger-inner::after{
+    top:7px;
+}
 
 /* Hamburger open state -> X */
-body.nav-open .hamburger-inner{background:transparent}
-body.nav-open .hamburger-inner::before{transform:translateY(7px) rotate(45deg)}
-body.nav-open .hamburger-inner::after{transform:translateY(-7px) rotate(-45deg)}
+body.nav-open .hamburger-inner{
+    background:transparent !important;
+}
+
+body.nav-open .hamburger-inner::before{
+    transform:translateY(7px) rotate(45deg);
+}
+
+body.nav-open .hamburger-inner::after{
+    transform:translateY(-7px) rotate(-45deg);
+}
 
 .theme-toggle{
-    margin-left:16px;
-    background:transparent;
-    border:none;
+    margin-left:12px;
+    background:rgba(10,102,255,0.08);
+    border:1px solid rgba(10,102,255,0.18);
+    border-radius:8px;
+    width:42px !important;
+    height:42px !important;
+    padding:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-size:18px;
     cursor:pointer;
+    z-index:1700;
+    box-shadow:none !important;
+}
+
+:where(html.dark) .theme-toggle{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
 }
 
 /* Mobile nav when opened */
-body.nav-open .main-nav{
-    transform:translateX(0);
-    visibility:visible;
+body.nav-open .main-nav,
+html body.nav-open #main-nav{
+    transform:translateX(0) !important;
+    visibility:visible !important;
+    display:flex !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
 }
 
 .main-nav{
@@ -259,9 +345,41 @@ body.nav-open .main-nav{
 @media (max-width:900px){
     .hamburger{display:flex}
     .theme-toggle{display:flex}
-    .main-nav{position:fixed; top:0; right:0; height:100vh; width:260px; background:var(--white); flex-direction:column; padding:100px 20px; transform:translateX(110%); visibility:hidden; box-shadow:-8px 0 30px rgba(0,0,0,0.12); z-index:1600}
-    .main-nav a{padding:12px 0; font-size:1.05rem}
-    header{padding:0 4%;}
+    .main-nav{
+        position:fixed;
+        top:0;
+        right:0;
+        height:100vh;
+        width:270px;
+        background:#ffffff;
+        flex-direction:column;
+        padding:90px 24px 30px;
+        transform:translateX(110%);
+        visibility:hidden;
+        box-shadow:-8px 0 35px rgba(0,0,0,0.18);
+        border-left:1px solid #e2e8f0;
+        z-index:1600;
+        gap:16px;
+    }
+    :where(html.dark) .main-nav, :where(body.dark) .main-nav{
+        background:#071126;
+        border-left:1px solid rgba(255,255,255,0.1);
+        box-shadow:-8px 0 35px rgba(0,0,0,0.5);
+    }
+    .main-nav a{
+        width:100%;
+        padding:12px 14px;
+        font-size:1.05rem;
+        border-radius:8px;
+        transition:background-color .2s ease, color .2s ease;
+    }
+    .main-nav a:hover{
+        background:rgba(10,102,255,0.08);
+    }
+    :where(html.dark) .main-nav a:hover{
+        background:rgba(255,255,255,0.06);
+    }
+    header{padding:0 5%;}
 }
 
 /* Dark theme variables */
@@ -281,7 +399,6 @@ body.nav-open .main-nav{
 }
 
 :where(html.dark) header, :where(body.dark) header{background:#071126}
-:where(html.dark) .modal, :where(body.dark) .modal{background:#0f1724; color:var(--text)}
 :where(html.dark) .card, :where(body.dark) .card{background:#071126}
 :where(html.dark) footer, :where(body.dark) footer{background:#021126}
 
@@ -289,7 +406,7 @@ body.nav-open .main-nav{
    BUTTON
 ================================== */
 
-button{
+button:not(.hamburger):not(.theme-toggle):not(.modal-close):not(.slider-prev):not(.slider-next):not(.slider-dot):not(#notification-close){
 
     background:var(--accent);
 
@@ -311,47 +428,81 @@ button{
 
 }
 
-button:hover{
+button:not(.hamburger):not(.theme-toggle):not(.modal-close):not(.slider-prev):not(.slider-next):not(.slider-dot):not(#notification-close):hover{
     background:var(--primary);
     color:var(--btn-text);
 
 }
 
 .notification-banner{
-    background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
-    color:var(--white);
+    background: linear-gradient(135deg, #0d6efd 0%, #0052cc 100%);
+    color: #ffffff;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:14px 26px;
+    padding:16px 24px;
     gap:16px;
     position:static;
     width:100%;
-    margin:20px 0;
-    border-radius:8px;
-    box-shadow:0 18px 40px rgba(10,102,255,0.08);
+    margin:24px 0;
+    border-radius:12px;
+    box-shadow:0 8px 24px rgba(13, 110, 253, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     transform:translateY(0);
     transition:transform .3s ease, opacity .2s ease;
 }
 
+:where(html.dark) .notification-banner, :where(body.dark) .notification-banner{
+    background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+}
+
 .notification-banner p{
     margin:0;
-    font-size:0.95rem;
+    font-size:1rem;
+    font-weight:600;
+    color:#ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.2px;
+}
+
+:where(html.dark) .notification-banner p, :where(body.dark) .notification-banner p{
+    color: #f8fafc !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .notification-banner button{
-    background:rgba(255,255,255,0.18);
-    border:none;
-    color:var(--white);
-    width:40px;
-    height:40px;
+    background:rgba(255,255,255,0.22);
+    border:1px solid rgba(255,255,255,0.35);
+    color:#ffffff !important;
+    width:36px;
+    height:36px;
+    flex-shrink:0;
     border-radius:50%;
     cursor:pointer;
-    font-size:1.1rem;
+    font-size:1.3rem;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:none;
+    transition:background-color .2s ease, transform .2s ease;
 }
 
 .notification-banner button:hover{
-    background:rgba(255,255,255,0.35);
+    background:rgba(255,255,255,0.4);
+    transform:scale(1.1);
+}
+
+:where(html.dark) .notification-banner button, :where(body.dark) .notification-banner button{
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+}
+
+:where(html.dark) .notification-banner button:hover, :where(body.dark) .notification-banner button:hover{
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .notification-banner.hidden{
@@ -385,22 +536,45 @@ button:hover{
 .modal{
     width:90%;
     max-width:520px;
-    background:var(--surface);
+    background:#ffffff;
+    color:#0b1b2b;
     border-radius:18px;
     padding:30px 30px 24px;
-    box-shadow:0 20px 45px rgba(0,0,0,0.18);
+    box-shadow:0 20px 45px rgba(0,0,0,0.25);
+    border:1px solid #e2e8f0;
     position:relative;
     text-align:left;
 }
 
+:where(html.dark) .modal, :where(body.dark) .modal{
+    background:#111b2b;
+    color:#f1f5f9;
+    border:1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:0 20px 50px rgba(0,0,0,0.6);
+}
+
 .modal h3{
     margin-bottom:16px;
+    color:#0052cc;
+    font-size:1.45rem;
+    font-weight:700;
+}
+
+:where(html.dark) .modal h3, :where(body.dark) .modal h3{
+    color:#93c5fd;
+    text-shadow: 0 0 12px rgba(147, 197, 253, 0.2);
 }
 
 .modal p{
-    color:var(--gray);
+    color:#1e293b;
     line-height:1.8;
     margin-bottom:14px;
+    font-size:1rem;
+    font-weight:500;
+}
+
+:where(html.dark) .modal p, :where(body.dark) .modal p{
+    color:#f1f5f9;
 }
 
 .modal-close{
@@ -411,15 +585,29 @@ button:hover{
     height:38px;
     border-radius:50%;
     border:none;
-    background:var(--primary);
-    color:var(--white);
+    background:#0a66ff;
+    color:#ffffff;
     font-size:22px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     cursor:pointer;
-    transition:transform .2s ease;
+    transition:transform .2s ease, background-color .2s ease;
 }
 
 .modal-close:hover{
-    transform:scale(1.05);
+    transform:scale(1.08);
+    background:#0052cc;
+}
+
+:where(html.dark) .modal-close, :where(body.dark) .modal-close{
+    background:#2563eb;
+    color:#ffffff;
+}
+
+:where(html.dark) .modal-close:hover, :where(body.dark) .modal-close:hover{
+    background:#3b82f6;
 }
 
 .campus-slider .slider-wrapper{
@@ -452,15 +640,36 @@ button:hover{
     position:absolute;
     top:50%;
     transform:translateY(-50%);
-    background:rgba(255,255,255,0.9);
+    background:rgba(255,255,255,0.92);
     border:none;
     width:46px;
     height:46px;
+    padding:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     border-radius:50%;
-    font-size:24px;
+    font-size:20px;
+    line-height:1;
     color:var(--primary);
     cursor:pointer;
-    box-shadow:var(--shadow);
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    transition:transform .2s ease, background-color .2s ease;
+}
+
+.slider-prev:hover,
+.slider-next:hover{
+    transform:translateY(-50%) scale(1.1);
+    background:#ffffff;
+}
+
+:where(html.dark) .slider-prev,
+:where(body.dark) .slider-prev,
+:where(html.dark) .slider-next,
+:where(body.dark) .slider-next{
+    background:rgba(15, 23, 42, 0.88);
+    color:#60a5fa;
+    border:1px solid rgba(255,255,255,0.15);
 }
 
 .slider-prev{
@@ -481,6 +690,7 @@ button:hover{
 .slider-dot{
     width:12px;
     height:12px;
+    padding:0 !important;
     border-radius:50%;
     border:none;
     background:var(--border);
@@ -488,9 +698,13 @@ button:hover{
     transition:transform .2s ease, background .2s ease;
 }
 
+:where(html.dark) .slider-dot{
+    background:rgba(255,255,255,0.25);
+}
+
 .slider-dot.active{
     background:var(--accent);
-    transform:scale(1.1);
+    transform:scale(1.2);
 }
 
 /* ===============================
@@ -748,7 +962,98 @@ input:focus, select:focus, textarea:focus{ box-shadow:0 6px 18px rgba(10,102,255
 .card:hover{ transform:translateY(-12px); box-shadow:0 18px 50px rgba(10,102,255,0.08); }
 
 /* Improve legibility for muted text */
-p, .modal p, .card p{ color:var(--muted); }
+p, .card p{ color:var(--muted); }
 
 /* Accessibility: larger clickable targets for small icons */
 .notification-banner button{ width:44px; height:44px; }
+
+/* ===============================
+   FAQ ACCORDION STYLES
+================================== */
+.faq-list {
+    max-width: 820px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faq-item {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 14px rgba(10, 102, 255, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.faq-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 8px 24px rgba(10, 102, 255, 0.1);
+}
+
+.faq-item h3 {
+    margin: 0;
+    padding: 20px 24px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.faq-item h3:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+.faq-item h3::after {
+    content: '+';
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--primary);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.faq-item.open h3 {
+    color: var(--primary);
+}
+
+.faq-item.open h3::after {
+    transform: rotate(45deg);
+}
+
+.faq-item p {
+    margin: 0;
+    padding: 0 24px 20px 24px;
+    color: var(--gray);
+    line-height: 1.7;
+    font-size: 0.98rem;
+}
+
+:where(html.dark) .faq-item,
+:where(body.dark) .faq-item {
+    background: #0f1724;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+:where(html.dark) .faq-item h3,
+:where(body.dark) .faq-item h3 {
+    color: #f1f5f9;
+}
+
+:where(html.dark) .faq-item.open h3,
+:where(body.dark) .faq-item.open h3 {
+    color: #60a5fa;
+}
+
+:where(html.dark) .faq-item p,
+:where(body.dark) .faq-item p {
+    color: #cbd5e1;
+}

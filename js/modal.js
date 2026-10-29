@@ -5,18 +5,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!openAddress || !closeAddress || !addressModal) return;
 
+    function openModal() {
+        addressModal.classList.add('active');
+        addressModal.setAttribute('aria-hidden', 'false');
+        closeAddress.focus();
+    }
+
+    function closeModal() {
+        addressModal.classList.remove('active');
+        addressModal.setAttribute('aria-hidden', 'true');
+        openAddress.focus();
+    }
+
     openAddress.addEventListener('click', function (event) {
         event.preventDefault();
-        addressModal.classList.add('active');
+        openModal();
     });
 
     closeAddress.addEventListener('click', function () {
-        addressModal.classList.remove('active');
+        closeModal();
     });
 
+    // Close on click outside
     addressModal.addEventListener('click', function (event) {
         if (event.target === addressModal) {
-            addressModal.classList.remove('active');
+            closeModal();
+        }
+    });
+
+    // Close on Escape key (Keyboard accessibility)
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && addressModal.classList.contains('active')) {
+            closeModal();
         }
     });
 });
+
