@@ -1,0 +1,29 @@
+[
+  {
+    "ticketId": "TKT-A819C2",
+    "timestamp": "2026-10-30 00:15:20",
+    "name": "Shubham Mendpara",
+    "email": "25cs044@charusat.edu.in",
+    "mobile": "9876543210",
+    "subject": "Academic Support",
+    "message": "Requesting syllabus verification for Semester 4 elective courses."
+  },
+  {
+    "ticketId": "TKT-B491D8",
+    "timestamp": "2026-10-30 00:18:45",
+    "name": "Aarav Patel",
+    "email": "aarav.ce@charusat.edu.in",
+    "mobile": "9823456789",
+    "subject": "Fees & Payments",
+    "message": "Inquiry regarding online payment receipt generation."
+  },
+  {
+    "ticketId": "TKT-C109F4",
+    "timestamp": "2026-10-30 00:22:10",
+    "name": "Diya Joshi",
+    "email": "diya.ec@charusat.edu.in",
+    "mobile": "9812345678",
+    "subject": "Exam & Results",
+    "message": "Re-evaluation schedule and grade card dispatch inquiry."
+  }
+]
