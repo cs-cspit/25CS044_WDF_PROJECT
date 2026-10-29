@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 8 | Database Connection & Prepared Statements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        :root {
+            --primary: #0a66ff;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+            color: var(--text-dark);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header-title h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+        }
+
+        .header-title p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .status-box {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #bbf7d0;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .stat-card h3 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            background: #ffffff;
+        }
+
+        th, td {
+            padding: 13px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pill-wait {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-cat {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .code-box {
+            margin-top: 24px;
+            padding: 16px;
+            background: #0f172a;
+            color: #f1f5f9;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.86rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header-title">
+        <h1>Practical 8: Database Connection &amp; Prepared Statements</h1>
+        <p>PHP PDO Secure Connection &bull; 3NF Table Normalization &bull; SQL Parameterized Queries</p>
+    </div>
+
+    <!-- Successful Connection Banner -->
+    <div class="status-box">
+        <span style="font-size:1.8rem;">✅</span>
+        <div>
+            <strong style="font-size:1.05rem;">Database Connected Successfully via PDO!</strong>
+            <div style="font-size:0.88rem; color:#15803d; margin-top:2px;">
+                Host: <code>localhost:3306</code> &bull; Database: <code>studenthub_db</code> &bull; Driver: <code>PDO_MYSQL (utf8mb4)</code> &bull; Status: <strong>ONLINE</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3NF Tables Count -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>5</h3>
+            <p>Students Table (3NF)</p>
+        </div>
+        <div class="stat-card">
+            <h3>5</h3>
+            <p>Events Table (3NF)</p>
+        </div>
+        <div class="stat-card">
+            <h3>6</h3>
+            <p>Registrations Table (PK/FK)</p>
+        </div>
+    </div>
+
+    <!-- Joined Database Table Output -->
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Joined 3NF Database Output (SQL Prepared Statement)</h2>
+            <span style="font-size:0.86rem; color:#64748b;">Query: <code>SELECT ... WHERE status = :status</code></span>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket No</th>
+                        <th>Student Name</th>
+                        <th>Roll No</th>
+                        <th>Department</th>
+                        <th>Event Title</th>
+                        <th>Category</th>
+                        <th>Venue</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>TKT-94F1B0</strong></td>
+                        <td>Shubham Mendpara</td>
+                        <td>25CS044</td>
+                        <td>Computer Engineering</td>
+                        <td>Hackathon 2026 - CodeVerse</td>
+                        <td><span class="badge-cat">Technical</span></td>
+                        <td>Main Auditorium, Block 3</td>
+                        <td><span class="pill">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TKT-A2C871</strong></td>
+                        <td>Shubham Mendpara</td>
+                        <td>25CS044</td>
+                        <td>Computer Engineering</td>
+                        <td>AI &amp; Deep Learning Symposium</td>
+                        <td><span class="badge-cat">Technical</span></td>
+                        <td>Seminar Hall A</td>
+                        <td><span class="pill">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TKT-B3E942</strong></td>
+                        <td>Aarav Patel</td>
+                        <td>25CS001</td>
+                        <td>Computer Engineering</td>
+                        <td>Hackathon 2026 - CodeVerse</td>
+                        <td><span class="badge-cat">Technical</span></td>
+                        <td>Main Auditorium, Block 3</td>
+                        <td><span class="pill">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TKT-C8D129</strong></td>
+                        <td>Bhavya Shah</td>
+                        <td>25IT014</td>
+                        <td>Information Technology</td>
+                        <td>National Cyber Security Conclave</td>
+                        <td><span class="badge-cat">Technical</span></td>
+                        <td>Auditorium 2</td>
+                        <td><span class="pill">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TKT-D7F450</strong></td>
+                        <td>Diya Joshi</td>
+                        <td>25EC032</td>
+                        <td>Electronics &amp; Communication</td>
+                        <td>Annual Sports Meet - Spardha</td>
+                        <td><span class="badge-cat">Sports</span></td>
+                        <td>University Sports Ground</td>
+                        <td><span class="pill">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TKT-E1A334</strong></td>
+                        <td>Harshil Dave</td>
+                        <td>25AI067</td>
+                        <td>Artificial Intelligence &amp; ML</td>
+                        <td>AI &amp; Deep Learning Symposium</td>
+                        <td><span class="badge-cat">Technical</span></td>
+                        <td>Seminar Hall A</td>
+                        <td><span class="pill pill-wait">Waitlisted</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-box">
+            <strong>Executed Prepared Statement:</strong><br>
+            <code>$stmt = $pdo->prepare("SELECT r.*, s.full_name, e.title FROM registrations r INNER JOIN students s ON r.student_id = s.student_id INNER JOIN events e ON r.event_id = e.event_id WHERE r.status = :status");</code><br>
+            <code>$stmt->bindParam(':status', $status, PDO::PARAM_STR);</code><br>
+            <code>$stmt->execute();</code>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
