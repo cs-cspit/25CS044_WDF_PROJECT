@@ -1,5 +1,7 @@
 /**
- * faq.js (Upgraded to Modular Dynamic Fetch with Category Filter & Search)
+ * faq.js
+ * Modular Dynamic Fetch with Category Filter, Search & Accordion
+ * Includes automatic offline/file:// CORS fallback for local double-click execution.
  */
 document.addEventListener('DOMContentLoaded', function () {
     const faqList = document.querySelector('.faq-list');
@@ -9,21 +11,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!faqList) return;
 
+    const fallbackFaqs = [
+        { "id": 1, "category": "Academic", "question": "How do I check my subject-wise attendance?", "answer": "Log in to your student portal, navigate to 'Attendance' from the sidebar, and select the desired semester to see detailed attendance percentages and leave deductions." },
+        { "id": 2, "category": "Account", "question": "How do I reset my portal password?", "answer": "Click 'Forgot Password' on the login screen or navigate to Settings. Enter your student email address to receive a secure password reset link." },
+        { "id": 3, "category": "Fees", "question": "How can I pay my semester fees online?", "answer": "Navigate to the 'Fees' module in the student dashboard. Select pending semester dues, click 'Pay Now', and complete the transaction via UPI, NetBanking, or Debit/Credit cards." },
+        { "id": 4, "category": "Academic", "question": "What is the procedure for applying for medical leave?", "answer": "Go to 'Leave Application' from the sidebar menu, choose 'Medical Leave', specify dates, upload medical certificates as supporting documents, and submit for HOD approval." },
+        { "id": 5, "category": "Events", "question": "How do I register for campus hackathons and workshops?", "answer": "Visit the 'Events' section to browse upcoming technical and cultural events. Click 'Register' on any active event to reserve your seat instantly." },
+        { "id": 6, "category": "Academic", "question": "Where can I download syllabus and course information?", "answer": "Navigate to 'Subjects' from the dashboard to access subject outlines, reference textbooks, course credits, and lab manuals." },
+        { "id": 7, "category": "Account", "question": "How do I update my registered contact number or residential address?", "answer": "Open 'Profile' or 'Address' from the dashboard, click 'Edit Details', make the necessary changes, and click 'Save Changes' to update your student dossier." },
+        { "id": 8, "category": "Examination", "question": "When are mid-semester and end-semester examination timetables published?", "answer": "Timetables are typically released 2 to 3 weeks prior to exam commencement under the 'Timetable' section and university notice board." },
+        { "id": 9, "category": "Fees", "question": "Where can I download official fee payment receipts?", "answer": "In the 'Fees' module, switch to the 'Transaction History' tab. Every paid fee includes an instant PDF receipt download button for scholarship or tax purposes." },
+        { "id": 10, "category": "Academic", "question": "What is the minimum attendance required to appear for final exams?", "answer": "As per university academic regulations, students are required to maintain a minimum of 80% attendance in lectures and practical sessions." },
+        { "id": 11, "category": "Examination", "question": "How do I apply for re-evaluation or answer-book verification?", "answer": "Within 7 days of result declaration, apply through the Examination tab under Student Services with the requisite re-evaluation fee." },
+        { "id": 12, "category": "Account", "question": "Can I switch between Light and Dark mode?", "answer": "Yes! Click the 🌙/☀️ toggle button located in the top navigation bar. Your chosen theme will be automatically saved in your browser." },
+        { "id": 13, "category": "Events", "question": "Do I get academic attendance credit for participating in university events?", "answer": "Yes, duty leave (DL) is credited once your event participation is verified by the faculty coordinator." },
+        { "id": 14, "category": "Fees", "question": "How do I apply for government or university merit scholarships?", "answer": "Check the Announcements section on the homepage during August-September for scholarship circulars and submission guidelines." },
+        { "id": 15, "category": "Support", "question": "Who do I contact if I encounter technical glitches in the portal?", "answer": "Submit a ticket via 'Feedback' or visit the 'Contact' page to email support@charusat.edu.in or visit the IT Helpdesk at Central Library." },
+        { "id": 16, "category": "Support", "question": "How do I submit semester feedback for faculty and course modules?", "answer": "Go to the 'Feedback' page from the student sidebar when the feedback window is activated towards the end of each semester." }
+    ];
+
     let allFaqs = [];
 
     function showLoading() {
         if (statusMsg) {
             statusMsg.style.display = 'block';
-            statusMsg.innerHTML = '⏳ Loading FAQs from faqs.json...';
+            statusMsg.innerHTML = '⏳ Loading FAQs...';
             statusMsg.className = 'status-msg loading';
-        }
-    }
-
-    function showError(err) {
-        if (statusMsg) {
-            statusMsg.style.display = 'block';
-            statusMsg.innerHTML = `⚠️ Failed to fetch FAQs: ${err}. Ensure a local web server is used.`;
-            statusMsg.className = 'status-msg error';
         }
     }
 
@@ -31,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (statusMsg) statusMsg.style.display = 'none';
     }
 
-    // Dynamic fetch from JSON
     async function loadFaqs() {
         showLoading();
         try {
@@ -39,15 +51,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             allFaqs = await res.json();
             hideStatus();
-            renderFaqs(allFaqs);
         } catch (e) {
-            showError(e.message);
-            // Fallback: If fetch fails (e.g. file:// protocol restriction), keep static items interactive
-            initAccordion();
+            console.warn('Fetch failed (likely file:// protocol CORS). Loading local FAQ dataset.', e);
+            allFaqs = fallbackFaqs;
+            hideStatus();
         }
+        renderFaqs(allFaqs);
     }
 
-    // Render FAQ Elements dynamically into DOM
     function renderFaqs(items) {
         if (items.length === 0) {
             faqList.innerHTML = `<p style="text-align:center; color:#64748b; padding:20px;">No questions found matching your query.</p>`;
@@ -67,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
         initAccordion();
     }
 
-    // Attach Collapsible Accordion logic
     function initAccordion() {
         const faqItems = faqList.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
@@ -100,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Search and Category Filter Handler
     function filterFaqs() {
         const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
         const cat = categorySelect ? categorySelect.value : 'all';
