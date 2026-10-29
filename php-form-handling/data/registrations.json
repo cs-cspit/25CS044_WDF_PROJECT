@@ -1,0 +1,24 @@
+[
+  {
+    "registrationId": "REG-B78F31",
+    "timestamp": "2026-10-30 00:25:10",
+    "fullName": "Shubham Mendpara",
+    "email": "25cs044@charusat.edu.in",
+    "phone": "9876543210",
+    "age": 20,
+    "gender": "Male",
+    "course": "Computer Engineering",
+    "message": "Looking forward to the semester lab sessions."
+  },
+  {
+    "registrationId": "REG-C94E12",
+    "timestamp": "2026-10-30 00:26:40",
+    "fullName": "Aarav Patel",
+    "email": "aarav.patel@charusat.edu.in",
+    "phone": "9823456789",
+    "age": 19,
+    "gender": "Male",
+    "course": "Information Technology",
+    "message": "Interested in web framework electives."
+  }
+]
