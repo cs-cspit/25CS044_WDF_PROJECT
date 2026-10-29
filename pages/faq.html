@@ -9,6 +9,53 @@
     <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="../css/public-pages.css">
     <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .faq-controls {
+            max-width: 820px;
+            margin: 0 auto 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .faq-controls input,
+        .faq-controls select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border, #cbd5e1);
+            background: var(--surface, #ffffff);
+            color: var(--text, #1e293b);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .faq-controls input {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .faq-tag {
+            font-size: 0.76rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(10, 102, 255, 0.1);
+            color: var(--primary, #0a66ff);
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .status-msg {
+            max-width: 820px;
+            margin: 0 auto 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.92rem;
+        }
+
+        .status-msg.loading { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+        .status-msg.error { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; }
+    </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -34,7 +81,7 @@
     <main id="main-content">
         <section class="page-hero">
             <h1>Frequently Asked Questions</h1>
-            <p>Quick answers to common StudentHub queries</p>
+            <p>Search & browse academic, fees, events, and account guidelines</p>
         </section>
 
         <nav class="breadcrumb container" aria-label="Breadcrumb">
@@ -43,34 +90,24 @@
 
         <section class="content-section faq">
             <div class="container">
-                <div class="faq-list" style="max-width:800px; margin:0 auto;">
-
-                    <article class="faq-item">
-                        <h3>How do I reset my portal password?</h3>
-                        <p>Click "Forgot Password" on the login page and follow the email instructions sent to your registered address.</p>
-                    </article>
-
-                    <article class="faq-item">
-                        <h3>Where can I view my attendance?</h3>
-                        <p>After logging in, open the Attendance page from the dashboard sidebar to see subject-wise records.</p>
-                    </article>
-
-                    <article class="faq-item">
-                        <h3>How do I pay semester fees online?</h3>
-                        <p>Go to Fees in your dashboard, select pending dues, and click Pay Now to use the secure payment gateway.</p>
-                    </article>
-
-                    <article class="faq-item">
-                        <h3>Can I apply for leave through the portal?</h3>
-                        <p>Yes. Use Leave Application on the dashboard, fill in dates and reason, and submit for approval.</p>
-                    </article>
-
-                    <article class="faq-item">
-                        <h3>How do I register for campus events?</h3>
-                        <p>Visit the Events page to browse upcoming activities and register for open events.</p>
-                    </article>
-
+                <!-- Search & Category Filters -->
+                <div class="faq-controls">
+                    <input type="text" id="faq-search" placeholder="🔍 Search question or keyword...">
+                    <select id="faq-category" aria-label="Filter category">
+                        <option value="all">All Topics</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Fees">Fees</option>
+                        <option value="Account">Account</option>
+                        <option value="Examination">Examination</option>
+                        <option value="Events">Events</option>
+                        <option value="Support">Support</option>
+                    </select>
                 </div>
+
+                <div id="faq-status" class="status-msg"></div>
+
+                <!-- Dynamic FAQ List (Loaded from data/faqs.json) -->
+                <div class="faq-list"></div>
             </div>
         </section>
     </main>

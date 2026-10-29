@@ -9,6 +9,102 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/public-pages.css">
     <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border, #cbd5e1);
+            background: var(--surface, #ffffff);
+            color: var(--text, #1e293b);
+            font-size: 0.92rem;
+            outline: none;
+        }
+
+        :where(html.dark) .filter-bar input,
+        :where(html.dark) .filter-bar select,
+        :where(body.dark) .filter-bar input,
+        :where(body.dark) .filter-bar select {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-bar input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .status-msg {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 0.92rem;
+        }
+
+        .status-msg.loading { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .status-msg.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+        .status-pill {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-active { background: #dcfce7; color: #15803d; }
+        .status-pending { background: #fef3c7; color: #b45309; }
+        .status-inactive { background: #fee2e2; color: #b91c1c; }
+
+        .btn-action {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+        .btn-approve { background: #0a66ff; color: #ffffff; }
+        .btn-view { background: #64748b; color: #ffffff; }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .page-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border, #cbd5e1);
+            background: var(--surface, #ffffff);
+            color: var(--text, #1e293b);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .page-btn.active {
+            background: #0a66ff;
+            color: #ffffff;
+            border-color: #0a66ff;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -31,7 +127,7 @@
 
     <div class="main" id="main-content">
         <header class="topbar">
-            <h1>Administration Panel</h1>
+            <h1>Administration Panel (Student Directory)</h1>
         </header>
 
         <nav class="breadcrumb" aria-label="Breadcrumb" style="padding:0 0 16px;">
@@ -40,88 +136,70 @@
 
         <section class="admin-stats" aria-label="Portal statistics">
             <article class="admin-stat">
-                <h2>1,240</h2>
-                <p>Registered Students</p>
+                <h2>16</h2>
+                <p>Registered Students (Loaded via JSON)</p>
             </article>
             <article class="admin-stat">
-                <h2>18</h2>
+                <h2>3</h2>
                 <p>Pending Registrations</p>
             </article>
             <article class="admin-stat">
-                <h2>7</h2>
-                <p>Upcoming Events</p>
+                <h2>16</h2>
+                <p>Active Campus Events</p>
             </article>
             <article class="admin-stat">
-                <h2>42</h2>
-                <p>Feedback Received</p>
+                <h2>16</h2>
+                <p>Verified FAQ Entries</p>
             </article>
         </section>
 
         <section class="dashboard-card">
-            <h2>Recent Registration Requests</h2>
+            <h2>Student Roster & Verification (JSON Fetch, Filter, Sort, Paginate)</h2>
+
+            <div id="student-status" class="status-msg"></div>
+
+            <!-- Search, Filter & Sort Controls -->
+            <div class="filter-bar">
+                <input type="text" id="student-search" placeholder="🔍 Search by student name, ID or email...">
+                <select id="student-course" aria-label="Filter by course">
+                    <option value="all">All Courses</option>
+                    <option value="Computer Engineering">Computer Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Artificial Intelligence & ML">Artificial Intelligence & ML</option>
+                    <option value="Electronics & Communication">Electronics & Communication</option>
+                </select>
+                <select id="student-sort" aria-label="Sort students">
+                    <option value="id-asc">ID: Ascending</option>
+                    <option value="name-asc">Name: A to Z</option>
+                    <option value="name-desc">Name: Z to A</option>
+                    <option value="gpa-desc">GPA: Highest First</option>
+                    <option value="gpa-asc">GPA: Lowest First</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Table Body populated from data/students.json -->
             <table>
                 <thead>
                     <tr>
                         <th scope="col">Student ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Course</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">GPA</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>25CS044</td>
-                        <td>Priya Shah</td>
-                        <td>Information Technology</td>
-                        <td>Pending</td>
-                        <td><button type="button">Approve</button></td>
-                    </tr>
-                    <tr>
-                        <td>25CS045</td>
-                        <td>Rahul Mehta</td>
-                        <td>Computer Engineering</td>
-                        <td>Pending</td>
-                        <td><button type="button">Approve</button></td>
-                    </tr>
-                    <tr>
-                        <td>25CS046</td>
-                        <td>Anita Desai</td>
-                        <td>Electronics</td>
-                        <td>Approved</td>
-                        <td><button type="button" disabled>Approved</button></td>
-                    </tr>
+                <tbody id="students-tbody">
+                    <!-- Loaded dynamically -->
                 </tbody>
             </table>
-        </section>
 
-        <section class="dashboard-card" style="margin-top:24px;">
-            <h2>Event Approval Queue</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Event</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Organizer</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tech Fest 2026</td>
-                        <td>2026-09-15</td>
-                        <td>CSE Dept</td>
-                        <td><button type="button">Publish</button></td>
-                    </tr>
-                    <tr>
-                        <td>Sports Week</td>
-                        <td>2026-10-01</td>
-                        <td>Sports Club</td>
-                        <td><button type="button">Publish</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Dynamic Pagination Buttons -->
+            <div id="student-pagination" class="pagination-container"></div>
         </section>
     </div>
+
+    <script src="../js/students-manager.js"></script>
 </body>
 </html>
