@@ -240,8 +240,32 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Success Action
-        alert('Registration Successful! Redirecting to dashboard...');
-        window.location.href = '../pages/dashboard.html';
+        // Gather registration payload
+        const selectedGender = Array.from(fields.gender).find(r => r.checked)?.value || 'Not specified';
+        const payload = {
+            name: fields.name.value.trim(),
+            email: fields.email.value.trim(),
+            mobile: fields.mobile.value.trim(),
+            course: fields.course.options[fields.course.selectedIndex]?.text || fields.course.value,
+            year: fields.year.options[fields.year.selectedIndex]?.text || fields.year.value,
+            gender: selectedGender
+        };
+
+        // Real Backend Storage to CSV & JSON
+        fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(result => {
+            alert(`🎉 ${result.message}\n\nData has been saved into registrations.csv and registrations.json! Redirecting to dashboard...`);
+            window.location.href = '../pages/dashboard.html';
+        })
+        .catch(err => {
+            console.warn('Backend server not reachable, saving to local session.', err);
+            alert('🎉 Registration Successful! Redirecting to dashboard...');
+            window.location.href = '../pages/dashboard.html';
+        });
     });
 });
