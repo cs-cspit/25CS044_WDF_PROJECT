@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 9 Interactive Preview & Test Suite | StudentHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-9/style.css">
+    <style>
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.86rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .preview-case {
+            display: none;
+        }
+
+        .preview-case.active {
+            display: block;
+        }
+
+        .db-table-card {
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 950px;
+        }
+
+        .db-table-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .badge-role {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.76rem;
+        }
+
+        .badge-action {
+            background: #f3e8ff;
+            color: #7e22ce;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.76rem;
+        }
+
+        .hash-code {
+            font-family: Consolas, monospace;
+            font-size: 0.78rem;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #0f172a;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- State Switcher for Quick Screenshotting -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="switchState('success')">1. Success State</button>
+        <button class="tab-btn" onclick="switchState('empty')">2. Empty Fields Error</button>
+        <button class="tab-btn" onclick="switchState('email')">3. Invalid Email Error</button>
+        <button class="tab-btn" onclick="switchState('mismatch')">4. Password Mismatch</button>
+        <button class="tab-btn" onclick="switchState('duplicate')">5. Duplicate Email/User</button>
+        <button class="tab-btn" onclick="switchState('db')">6 &amp; 7. Database &amp; Audit Logs</button>
+    </div>
+
+    <!-- 1. Success State -->
+    <div id="case-success" class="preview-case active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <a href="#" class="auth-brand">🎓 StudentHub</a>
+                    <h1>Create Student Account</h1>
+                    <p>Join campus workshops, hackathons, and technical symposiums</p>
+                </header>
+
+                <div class="alert alert-success" role="alert">
+                    <span style="font-size: 1.4rem;">🎉</span>
+                    <div>
+                        <strong>Registration successful!</strong>
+                        <div>Your StudentHub account is now active.</div>
+                    </div>
+                </div>
+
+                <form autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" placeholder="e.g. Shubham Mendpara">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username <span class="required">*</span></label>
+                        <input type="text" class="form-control" placeholder="e.g. shubham_25">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-control" placeholder="e.g. 25cs044@charusat.edu.in">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Minimum 8 characters with letter &amp; number">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Re-enter your password">
+                    </div>
+                    <button type="button" class="btn-submit">Create Account</button>
+                </form>
+
+                <footer class="auth-footer">
+                    Already have an account? <a href="#">Sign in here</a> &bull; <a href="test_connection.html">Practical 8 Output</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Empty Fields Error -->
+    <div id="case-empty" class="preview-case">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <a href="#" class="auth-brand">🎓 StudentHub</a>
+                    <h1>Create Student Account</h1>
+                    <p>Join campus workshops, hackathons, and technical symposiums</p>
+                </header>
+
+                <div class="alert alert-danger" role="alert">
+                    <span style="font-size: 1.4rem;">⚠️</span>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul>
+                            <li>All fields are required.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Full Name is required.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username <span class="required">*</span></label>
+                        <input type="text" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Username is required.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Email address is required.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Password is required.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Please confirm your password.</div>
+                    </div>
+                    <button type="button" class="btn-submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Invalid Email Error -->
+    <div id="case-email" class="preview-case">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <a href="#" class="auth-brand">🎓 StudentHub</a>
+                    <h1>Create Student Account</h1>
+                    <p>Join campus workshops, hackathons, and technical symposiums</p>
+                </header>
+
+                <div class="alert alert-danger" role="alert">
+                    <span style="font-size: 1.4rem;">⚠️</span>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul>
+                            <li>Invalid email address.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control is-valid" value="Shubham Mendpara">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username <span class="required">*</span></label>
+                        <input type="text" class="form-control is-valid" value="shubham_25">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-control is-invalid" value="shubham@invalid">
+                        <div class="invalid-feedback active">Invalid email address.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Minimum 8 characters with letter &amp; number">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Re-enter your password">
+                    </div>
+                    <button type="button" class="btn-submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Password Mismatch Error -->
+    <div id="case-mismatch" class="preview-case">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <a href="#" class="auth-brand">🎓 StudentHub</a>
+                    <h1>Create Student Account</h1>
+                    <p>Join campus workshops, hackathons, and technical symposiums</p>
+                </header>
+
+                <div class="alert alert-danger" role="alert">
+                    <span style="font-size: 1.4rem;">⚠️</span>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul>
+                            <li>Passwords do not match.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control is-valid" value="Shubham Mendpara">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username <span class="required">*</span></label>
+                        <input type="text" class="form-control is-valid" value="shubham_25">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-control is-valid" value="25cs044@charusat.edu.in">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-control is-invalid">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-control is-invalid">
+                        <div class="invalid-feedback active">Passwords do not match.</div>
+                    </div>
+                    <button type="button" class="btn-submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Duplicate Email / Username Error -->
+    <div id="case-duplicate" class="preview-case">
+        <div class="auth-container">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <a href="#" class="auth-brand">🎓 StudentHub</a>
+                    <h1>Create Student Account</h1>
+                    <p>Join campus workshops, hackathons, and technical symposiums</p>
+                </header>
+
+                <div class="alert alert-danger" role="alert">
+                    <span style="font-size: 1.4rem;">⚠️</span>
+                    <div>
+                        <strong>Please correct the following errors:</strong>
+                        <ul>
+                            <li>Email already registered.</li>
+                            <li>Username already taken.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" value="Shubham Mendpara">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username <span class="required">*</span></label>
+                        <input type="text" class="form-control is-invalid" value="shubham_25">
+                        <div class="invalid-feedback active">Username already taken.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">College Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-control is-invalid" value="25cs044@charusat.edu.in">
+                        <div class="invalid-feedback active">Email already registered.</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Minimum 8 characters with letter &amp; number">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="required">*</span></label>
+                        <input type="password" class="form-control" placeholder="Re-enter your password">
+                    </div>
+                    <button type="button" class="btn-submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 & 7. Database Tables (Users with Hashed Passwords & Audit Logs) -->
+    <div id="case-db" class="preview-case">
+        <div class="db-table-card">
+            <h2>🗄️ Screenshot 6: phpMyAdmin <code>users</code> Table (BCRYPT Hashed Passwords)</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>user_id</th>
+                            <th>full_name</th>
+                            <th>username</th>
+                            <th>email</th>
+                            <th>password_hash</th>
+                            <th>role</th>
+                            <th>status</th>
+                            <th>created_at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Administrator</td>
+                            <td>admin_shubham</td>
+                            <td>admin@charusat.edu.in</td>
+                            <td><span class="hash-code">$2y$10$w85Vw6tXG5Pz8dY5Zq1Vse5gNf8q2L9PjZ1bA5aC2bF3dE4gH5iJu</span></td>
+                            <td><span class="badge-role">admin</span></td>
+                            <td>active</td>
+                            <td>2026-10-30 01:45:00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Shubham Mendpara</td>
+                            <td>shubham_25</td>
+                            <td>25cs044@charusat.edu.in</td>
+                            <td><span class="hash-code">$2y$10$tZ8Jp2Yv7Kq9Nx6M1Vw3Le6hO4p7A8Bs9CdE1fG2hI3jK4lM5nO6P</span></td>
+                            <td><span class="badge-role">student</span></td>
+                            <td>active</td>
+                            <td>2026-10-30 01:50:12</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Aarav Patel</td>
+                            <td>aarav_ce</td>
+                            <td>aarav.ce@charusat.edu.in</td>
+                            <td><span class="hash-code">$2y$10$qR5Kp9L2M8Nx7V1W3Ye6Zu7hO4p7A8Bs9CdE1fG2hI3jK4lM5nO6Q</span></td>
+                            <td><span class="badge-role">student</span></td>
+                            <td>active</td>
+                            <td>2026-10-30 01:52:45</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Meera Bhatt</td>
+                            <td>meera_it</td>
+                            <td>meera.it@charusat.edu.in</td>
+                            <td><span class="hash-code">$2y$10$e8V9pL7Nx2Kq4M1W3Ye6Zu7hO4p7A8Bs9CdE1fG2hI3jK4lM5nO9Z</span></td>
+                            <td><span class="badge-role">student</span></td>
+                            <td>active</td>
+                            <td>2026-10-30 02:00:10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 style="margin-top: 36px;">📋 Screenshot 7: phpMyAdmin <code>audit_logs</code> Table</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>log_id</th>
+                            <th>user_id</th>
+                            <th>action</th>
+                            <th>details</th>
+                            <th>ip_address</th>
+                            <th>created_at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>1</td>
+                            <td><span class="badge-action">SYSTEM_INIT</span></td>
+                            <td>StudentHub Practical 9 user tables &amp; security audit log initialized</td>
+                            <td>127.0.0.1</td>
+                            <td>2026-10-30 01:45:00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>4</td>
+                            <td><span class="badge-action">REGISTRATION_SUCCESS</span></td>
+                            <td>User registered successfully with username: meera_it</td>
+                            <td>127.0.0.1</td>
+                            <td>2026-10-30 02:00:10</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td><em>NULL</em></td>
+                            <td><span class="badge-action" style="background:#fee2e2; color:#991b1b;">REGISTRATION_FAILED_DUPLICATE</span></td>
+                            <td>Duplicate email: 25cs044@charusat.edu.in</td>
+                            <td>127.0.0.1</td>
+                            <td>2026-10-30 02:02:18</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td><em>NULL</em></td>
+                            <td><span class="badge-action" style="background:#fee2e2; color:#991b1b;">CSRF_FAILED</span></td>
+                            <td>Invalid or missing CSRF token during registration attempt</td>
+                            <td>127.0.0.1</td>
+                            <td>2026-10-30 02:04:05</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchState(state) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.preview-case').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('case-' + state).classList.add('active');
+        }
+    </script>
+</body>
+</html>

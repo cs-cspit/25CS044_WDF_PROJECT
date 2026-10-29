@@ -1,0 +1,277 @@
+/* ==========================================================================
+   Practical 9: StudentHub Secure User Registration Styling
+   File: style.css
+   Modern, Bootstrap-inspired responsive layout with clean typography
+   ========================================================================== */
+
+:root {
+    --primary: #0a66ff;
+    --primary-hover: #0052cc;
+    --primary-light: #e0f2fe;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --success-border: #bbf7d0;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --danger-border: #fecaca;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #cbd5e1;
+    --border-focus: #0a66ff;
+    --card-bg: #ffffff;
+    --bg-page: #f8fafc;
+    --radius: 10px;
+    --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.auth-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+.auth-header h1 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.auth-header p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+/* Alert Boxes */
+.alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 22px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: #166534;
+    border: 1px solid var(--success-border);
+}
+
+.alert-danger {
+    background: var(--danger-bg);
+    color: #991b1b;
+    border: 1px solid var(--danger-border);
+}
+
+.alert ul {
+    margin-left: 18px;
+    margin-top: 6px;
+}
+
+.alert li {
+    margin-bottom: 3px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.form-label .required {
+    color: var(--danger);
+    margin-left: 2px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(10, 102, 255, 0.15);
+}
+
+.form-control.is-invalid {
+    border-color: var(--danger);
+    background-color: #fffaf0;
+}
+
+.form-control.is-valid {
+    border-color: var(--success);
+}
+
+.form-text {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.invalid-feedback {
+    display: none;
+    font-size: 0.8rem;
+    color: var(--danger);
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.invalid-feedback.active {
+    display: block;
+}
+
+/* Password Strength Indicator */
+.strength-meter {
+    height: 4px;
+    width: 100%;
+    background-color: #e2e8f0;
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-text {
+    font-size: 0.76rem;
+    font-weight: 600;
+    margin-top: 4px;
+    display: block;
+}
+
+.strength-weak { width: 33.3%; background-color: var(--danger); color: var(--danger); }
+.strength-medium { width: 66.6%; background-color: var(--warning); color: var(--warning); }
+.strength-strong { width: 100%; background-color: var(--success); color: var(--success); }
+
+/* Buttons */
+.btn-submit {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(10, 102, 255, 0.2);
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Footer Links & Info */
+.auth-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.security-badge {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #94a3b8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 26px 20px;
+    }
+}
