@@ -186,6 +186,11 @@ tr:hover td {
     color: #15803d;
 }
 
+.badge-purple {
+    background: #f3e8ff;
+    color: #7e22ce;
+}
+
 .code-snippet {
     background: #0f172a;
     color: #f8fafc;

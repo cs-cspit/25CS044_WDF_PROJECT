@@ -48,7 +48,7 @@ try {
     // --------------------------------------------------------------------------
     // QUERY 2: Prepared Statement for Table 2 - All Events
     // --------------------------------------------------------------------------
-    $stmtEvents = $pdo->prepare("SELECT event_id, event_name, event_date, venue, description FROM events ORDER BY event_date ASC");
+    $stmtEvents = $pdo->prepare("SELECT event_id, event_name, event_date, venue, organizer_club, max_seats, description FROM events ORDER BY event_date ASC");
     $stmtEvents->execute();
     $allEvents = $stmtEvents->fetchAll();
 
@@ -61,8 +61,10 @@ try {
                     s.department,
                     e.event_name,
                     e.event_date,
+                    e.organizer_club,
                     e.venue,
-                    r.registered_at
+                    r.registered_at,
+                    r.status
                 FROM registrations r
                 INNER JOIN students s ON r.student_id = s.student_id
                 INNER JOIN events e ON r.event_id = e.event_id
@@ -177,8 +179,10 @@ try {
                     <tr>
                         <th>ID</th>
                         <th>Event Name</th>
+                        <th>Organizer Club</th>
                         <th>Date</th>
                         <th>Venue</th>
+                        <th>Max Seats</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -187,8 +191,10 @@ try {
                         <tr>
                             <td><strong><?= htmlspecialchars((string)$row['event_id'], ENT_QUOTES, 'UTF-8') ?></strong></td>
                             <td><strong><?= htmlspecialchars($row['event_name'], ENT_QUOTES, 'UTF-8') ?></strong></td>
+                            <td><span class="badge badge-purple"><?= htmlspecialchars($row['organizer_club'], ENT_QUOTES, 'UTF-8') ?></span></td>
                             <td><?= htmlspecialchars($row['event_date'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['venue'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= htmlspecialchars((string)$row['max_seats'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['description'] ?? '-', ENT_QUOTES, 'UTF-8') ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -200,8 +206,8 @@ try {
     <!-- Table 3: Registrations with JOIN -->
     <div class="card">
         <div class="card-title">
-            <h2>Table 3: Registrations with JOIN (Students &bull; Events)</h2>
-            <small>Multi-table JOIN via Prepared Statement</small>
+            <h2>Table 3: Event Registrations with JOIN (Students &bull; Events)</h2>
+            <small>Many-to-Many Decomposition via Junction Table</small>
         </div>
         <div class="table-responsive">
             <table>
@@ -211,9 +217,11 @@ try {
                         <th>Student Name</th>
                         <th>Department</th>
                         <th>Event Name</th>
+                        <th>Organizer Club</th>
                         <th>Event Date</th>
                         <th>Venue</th>
                         <th>Registered At</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -223,9 +231,11 @@ try {
                             <td><?= htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['department'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><strong><?= htmlspecialchars($row['event_name'], ENT_QUOTES, 'UTF-8') ?></strong></td>
+                            <td><span class="badge badge-purple"><?= htmlspecialchars($row['organizer_club'], ENT_QUOTES, 'UTF-8') ?></span></td>
                             <td><?= htmlspecialchars($row['event_date'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['venue'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><small><?= htmlspecialchars($row['registered_at'], ENT_QUOTES, 'UTF-8') ?></small></td>
+                            <td><span class="badge badge-green"><?= htmlspecialchars(ucfirst($row['status']), ENT_QUOTES, 'UTF-8') ?></span></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

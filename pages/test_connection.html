@@ -3,112 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practical 8 | Database Connection & Prepared Statements</title>
+    <title>Practical 8: StudentHub Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
     <style>
         :root {
             --primary: #0a66ff;
+            --primary-dark: #0052cc;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
             --success-bg: #dcfce7;
             --success-text: #166534;
-            --card-bg: #ffffff;
-            --text-dark: #0f172a;
-            --border: #cbd5e1;
+            --success-border: #bbf7d0;
+            --info-bg: #eff6ff;
+            --info-text: #1d4ed8;
+            --info-border: #bfdbfe;
+            --radius: 10px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: #f8fafc;
-            color: var(--text-dark);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
             padding: 40px 20px;
         }
 
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .header-title {
+        .header {
             text-align: center;
             margin-bottom: 28px;
         }
 
-        .header-title h1 {
-            color: var(--primary);
+        .header h1 {
             font-size: 2.2rem;
+            color: var(--primary);
             margin-bottom: 6px;
         }
 
-        .header-title p {
-            color: #64748b;
+        .header p {
+            color: var(--text-muted);
             font-size: 1rem;
         }
 
-        .status-box {
+        /* Alert Banners */
+        .alert {
             padding: 16px 20px;
-            border-radius: 10px;
+            border-radius: var(--radius);
             margin-bottom: 24px;
-            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 14px;
-            background: var(--success-bg);
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background-color: var(--success-bg);
             color: var(--success-text);
-            border: 1px solid #bbf7d0;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+            border: 1px solid var(--success-border);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 26px;
+        .alert-info {
+            background-color: var(--info-bg);
+            color: var(--info-text);
+            border: 1px solid var(--info-border);
         }
 
-        .stat-card {
-            background: var(--card-bg);
-            padding: 22px;
-            border-radius: 12px;
+        /* Card Container */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 26px;
             border: 1px solid var(--border);
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
         }
 
-        .stat-card h3 {
-            font-size: 2.2rem;
-            color: var(--primary);
-            margin-bottom: 4px;
-        }
-
-        .stat-card p {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .table-card {
-            background: var(--card-bg);
-            padding: 28px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-
-        .table-header {
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .table-header h2 {
-            font-size: 1.3rem;
-            color: var(--text-dark);
+        .card-title small {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
+        /* Filter Controls */
+        .filter-form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .filter-form select,
+        .filter-form button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .filter-form select {
+            border: 1px solid var(--border);
+            background: #ffffff;
+            color: var(--text-main);
+        }
+
+        .filter-form button {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Tables */
         .table-responsive {
             overflow-x: auto;
             border-radius: 8px;
@@ -123,53 +155,50 @@
         }
 
         th, td {
-            padding: 13px 16px;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 12px 14px;
             text-align: left;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         th {
-            background: #f8fafc;
+            background-color: #f8fafc;
             color: #334155;
             font-weight: 600;
         }
 
         tr:hover td {
-            background: #f8fafc;
+            background-color: #f8fafc;
         }
 
-        .pill {
+        .badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .pill-wait {
-            background: #fef3c7;
-            color: #b45309;
-        }
-
-        .badge-cat {
-            background: #e0f2fe;
-            color: #0369a1;
             padding: 3px 8px;
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
+            background: #e0f2fe;
+            color: #0369a1;
         }
 
-        .code-box {
-            margin-top: 24px;
-            padding: 16px;
+        .badge-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-purple {
+            background: #f3e8ff;
+            color: #7e22ce;
+        }
+
+        .code-snippet {
             background: #0f172a;
-            color: #f1f5f9;
+            color: #f8fafc;
+            padding: 14px 18px;
             border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.86rem;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.88rem;
+            margin-top: 14px;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -177,129 +206,372 @@
 
 <div class="container">
 
-    <div class="header-title">
-        <h1>Practical 8: Database Connection &amp; Prepared Statements</h1>
-        <p>PHP PDO Secure Connection &bull; 3NF Table Normalization &bull; SQL Parameterized Queries</p>
-    </div>
+    <!-- Header Section -->
+    <header class="header">
+        <h1>Practical 8: StudentHub Database</h1>
+        <p>PHP PDO Prepared Statements &bull; MySQL 3NF Tables &bull; Stored Procedure Demo</p>
+    </header>
 
-    <!-- Successful Connection Banner -->
-    <div class="status-box">
-        <span style="font-size:1.8rem;">✅</span>
+    <!-- Green Successful Connection Banner -->
+    <div class="alert alert-success" role="alert">
+        <span style="font-size: 1.6rem;">✅</span>
         <div>
-            <strong style="font-size:1.05rem;">Database Connected Successfully via PDO!</strong>
-            <div style="font-size:0.88rem; color:#15803d; margin-top:2px;">
-                Host: <code>localhost:3306</code> &bull; Database: <code>studenthub_db</code> &bull; Driver: <code>PDO_MYSQL (utf8mb4)</code> &bull; Status: <strong>ONLINE</strong>
+            <strong>Database connected successfully!</strong>
+            <div style="font-size: 0.88rem; margin-top: 2px;">
+                Connected to MySQL database <code>studenthub</code> on <code>localhost:3306</code> using PHP PDO.
             </div>
         </div>
     </div>
 
-    <!-- 3NF Tables Count -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>5</h3>
-            <p>Students Table (3NF)</p>
-        </div>
-        <div class="stat-card">
-            <h3>5</h3>
-            <p>Events Table (3NF)</p>
-        </div>
-        <div class="stat-card">
-            <h3>6</h3>
-            <p>Registrations Table (PK/FK)</p>
+    <!-- Stored Procedure Execution Demo -->
+    <div class="alert alert-info" role="alert">
+        <span style="font-size: 1.6rem;">⚡</span>
+        <div>
+            <strong>Stored Procedure Execution: <code>RegisterStudent(1, 3, @status_code, @message)</code></strong>
+            <div style="font-size: 0.88rem; margin-top: 2px;">
+                Result: <strong>Success: Student registered for the event successfully!</strong> (Status Code: 200)
+            </div>
         </div>
     </div>
 
-    <!-- Joined Database Table Output -->
-    <div class="table-card">
-        <div class="table-header">
-            <h2>Joined 3NF Database Output (SQL Prepared Statement)</h2>
-            <span style="font-size:0.86rem; color:#64748b;">Query: <code>SELECT ... WHERE status = :status</code></span>
+    <!-- Table 1: All Students -->
+    <div class="card">
+        <div class="card-title">
+            <h2>Table 1: All Students (<code>SELECT * FROM students</code>)</h2>
+            <small>Prepared Statement without parameters</small>
         </div>
-
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th>Ticket No</th>
-                        <th>Student Name</th>
-                        <th>Roll No</th>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Phone</th>
                         <th>Department</th>
-                        <th>Event Title</th>
-                        <th>Category</th>
+                        <th>Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Shubham Mendpara</td>
+                        <td>25cs044@charusat.edu.in</td>
+                        <td>9876543210</td>
+                        <td><span class="badge">Computer Engineering</span></td>
+                        <td>2nd Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Aarav Patel</td>
+                        <td>aarav.ce@charusat.edu.in</td>
+                        <td>9823456789</td>
+                        <td><span class="badge">Computer Engineering</span></td>
+                        <td>2nd Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Bhavya Shah</td>
+                        <td>bhavya.it@charusat.edu.in</td>
+                        <td>9811223344</td>
+                        <td><span class="badge">Information Technology</span></td>
+                        <td>3rd Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Diya Joshi</td>
+                        <td>diya.ec@charusat.edu.in</td>
+                        <td>9877889900</td>
+                        <td><span class="badge">Electronics &amp; Communication</span></td>
+                        <td>4th Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Harshil Dave</td>
+                        <td>harshil.ai@charusat.edu.in</td>
+                        <td>9899001122</td>
+                        <td><span class="badge">Computer Engineering</span></td>
+                        <td>1st Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Meera Bhatt</td>
+                        <td>meera.it@charusat.edu.in</td>
+                        <td>9833445566</td>
+                        <td><span class="badge">Information Technology</span></td>
+                        <td>3rd Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Rohan Raval</td>
+                        <td>rohan.mech@charusat.edu.in</td>
+                        <td>9844556677</td>
+                        <td><span class="badge">Mechanical Engineering</span></td>
+                        <td>4th Year</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Table 2: All Events -->
+    <div class="card">
+        <div class="card-title">
+            <h2>Table 2: All Campus Events (<code>SELECT * FROM events</code>)</h2>
+            <small>Prepared Statement without parameters</small>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Organizer Club</th>
+                        <th>Date</th>
                         <th>Venue</th>
+                        <th>Max Seats</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                        <td><span class="badge badge-purple">Git &amp; Open Source Club</span></td>
+                        <td>2026-07-15</td>
+                        <td>Lab 402, IT Building</td>
+                        <td>60</td>
+                        <td>Interactive session covering Git branching, rebasing, pull requests, and open source workflows.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                        <td><span class="badge badge-purple">Computer Engineering Dept</span></td>
+                        <td>2026-07-20</td>
+                        <td>Main Auditorium, Block 3</td>
+                        <td>150</td>
+                        <td>24-hour national level hackathon addressing real-world problem statements.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td><strong>Web Dev Seminar: Modern Fullstack</strong></td>
+                        <td><span class="badge badge-purple">Developer Student Club</span></td>
+                        <td>2026-08-05</td>
+                        <td>Seminar Hall A</td>
+                        <td>100</td>
+                        <td>Expert keynote on modern web architecture, REST APIs, and responsive design systems.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td><strong>Inter-College Coding Contest</strong></td>
+                        <td><span class="badge badge-purple">Competitive Programming Club</span></td>
+                        <td>2026-08-18</td>
+                        <td>Central Computing Facility</td>
+                        <td>120</td>
+                        <td>Competitive programming challenge featuring algorithmic problem solving in C++, Java, and Python.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Table 3: Registrations with JOIN -->
+    <div class="card">
+        <div class="card-title">
+            <h2>Table 3: Event Registrations with JOIN (Students &bull; Events)</h2>
+            <small>Many-to-Many Decomposition via Junction Table</small>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reg ID</th>
+                        <th>Student Name</th>
+                        <th>Department</th>
+                        <th>Event Name</th>
+                        <th>Organizer Club</th>
+                        <th>Event Date</th>
+                        <th>Venue</th>
+                        <th>Registered At</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>TKT-94F1B0</strong></td>
+                        <td><strong>#1</strong></td>
                         <td>Shubham Mendpara</td>
-                        <td>25CS044</td>
                         <td>Computer Engineering</td>
-                        <td>Hackathon 2026 - CodeVerse</td>
-                        <td><span class="badge-cat">Technical</span></td>
+                        <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                        <td><span class="badge badge-purple">Git &amp; Open Source Club</span></td>
+                        <td>2026-07-15</td>
+                        <td>Lab 402, IT Building</td>
+                        <td><small>2026-06-01 10:15:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>#2</strong></td>
+                        <td>Shubham Mendpara</td>
+                        <td>Computer Engineering</td>
+                        <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                        <td><span class="badge badge-purple">Computer Engineering Dept</span></td>
+                        <td>2026-07-20</td>
                         <td>Main Auditorium, Block 3</td>
-                        <td><span class="pill">Confirmed</span></td>
+                        <td><small>2026-06-02 11:30:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
                     </tr>
                     <tr>
-                        <td><strong>TKT-A2C871</strong></td>
+                        <td><strong>#3</strong></td>
                         <td>Shubham Mendpara</td>
-                        <td>25CS044</td>
                         <td>Computer Engineering</td>
-                        <td>AI &amp; Deep Learning Symposium</td>
-                        <td><span class="badge-cat">Technical</span></td>
-                        <td>Seminar Hall A</td>
-                        <td><span class="pill">Confirmed</span></td>
+                        <td><strong>Inter-College Coding Contest</strong></td>
+                        <td><span class="badge badge-purple">Competitive Programming Club</span></td>
+                        <td>2026-08-18</td>
+                        <td>Central Computing Facility</td>
+                        <td><small>2026-06-03 14:00:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
                     </tr>
                     <tr>
-                        <td><strong>TKT-B3E942</strong></td>
+                        <td><strong>#4</strong></td>
                         <td>Aarav Patel</td>
-                        <td>25CS001</td>
                         <td>Computer Engineering</td>
-                        <td>Hackathon 2026 - CodeVerse</td>
-                        <td><span class="badge-cat">Technical</span></td>
+                        <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                        <td><span class="badge badge-purple">Git &amp; Open Source Club</span></td>
+                        <td>2026-07-15</td>
+                        <td>Lab 402, IT Building</td>
+                        <td><small>2026-06-02 14:45:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>#5</strong></td>
+                        <td>Aarav Patel</td>
+                        <td>Computer Engineering</td>
+                        <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                        <td><span class="badge badge-purple">Computer Engineering Dept</span></td>
+                        <td>2026-07-20</td>
                         <td>Main Auditorium, Block 3</td>
-                        <td><span class="pill">Confirmed</span></td>
+                        <td><small>2026-06-03 09:20:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
                     </tr>
                     <tr>
-                        <td><strong>TKT-C8D129</strong></td>
+                        <td><strong>#6</strong></td>
                         <td>Bhavya Shah</td>
-                        <td>25IT014</td>
                         <td>Information Technology</td>
-                        <td>National Cyber Security Conclave</td>
-                        <td><span class="badge-cat">Technical</span></td>
-                        <td>Auditorium 2</td>
-                        <td><span class="pill">Confirmed</span></td>
+                        <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                        <td><span class="badge badge-purple">Computer Engineering Dept</span></td>
+                        <td>2026-07-20</td>
+                        <td>Main Auditorium, Block 3</td>
+                        <td><small>2026-06-03 16:10:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
                     </tr>
                     <tr>
-                        <td><strong>TKT-D7F450</strong></td>
-                        <td>Diya Joshi</td>
-                        <td>25EC032</td>
-                        <td>Electronics &amp; Communication</td>
-                        <td>Annual Sports Meet - Spardha</td>
-                        <td><span class="badge-cat">Sports</span></td>
-                        <td>University Sports Ground</td>
-                        <td><span class="pill">Confirmed</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>TKT-E1A334</strong></td>
-                        <td>Harshil Dave</td>
-                        <td>25AI067</td>
-                        <td>Artificial Intelligence &amp; ML</td>
-                        <td>AI &amp; Deep Learning Symposium</td>
-                        <td><span class="badge-cat">Technical</span></td>
+                        <td><strong>#7</strong></td>
+                        <td>Bhavya Shah</td>
+                        <td>Information Technology</td>
+                        <td><strong>Web Dev Seminar: Modern Fullstack</strong></td>
+                        <td><span class="badge badge-purple">Developer Student Club</span></td>
+                        <td>2026-08-05</td>
                         <td>Seminar Hall A</td>
-                        <td><span class="pill pill-wait">Waitlisted</span></td>
+                        <td><small>2026-06-04 10:00:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>#8</strong></td>
+                        <td>Diya Joshi</td>
+                        <td>Electronics &amp; Communication</td>
+                        <td><strong>Web Dev Seminar: Modern Fullstack</strong></td>
+                        <td><span class="badge badge-purple">Developer Student Club</span></td>
+                        <td>2026-08-05</td>
+                        <td>Seminar Hall A</td>
+                        <td><small>2026-06-04 15:25:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>#9</strong></td>
+                        <td>Diya Joshi</td>
+                        <td>Electronics &amp; Communication</td>
+                        <td><strong>Inter-College Coding Contest</strong></td>
+                        <td><span class="badge badge-purple">Competitive Programming Club</span></td>
+                        <td>2026-08-18</td>
+                        <td>Central Computing Facility</td>
+                        <td><small>2026-06-05 12:40:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>#10</strong></td>
+                        <td>Harshil Dave</td>
+                        <td>Computer Engineering</td>
+                        <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                        <td><span class="badge badge-purple">Git &amp; Open Source Club</span></td>
+                        <td>2026-07-15</td>
+                        <td>Lab 402, IT Building</td>
+                        <td><small>2026-06-05 13:50:00</small></td>
+                        <td><span class="badge badge-green">Registered</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Table 4: Bound Parameter Example (Filter by Department) -->
+    <div class="card">
+        <div class="card-title">
+            <h2>Table 4: Bound Parameter Filter Query (<code>WHERE department = ?</code>)</h2>
+            <small>Security Demo: Parameterized placeholder prevents SQL Injection</small>
+        </div>
+
+        <form method="GET" class="filter-form">
+            <label for="dept"><strong>Department Filter:</strong></label>
+            <select name="dept" id="dept" disabled>
+                <option selected>Computer Engineering (Bound Parameter: "Computer Engineering")</option>
+            </select>
+            <button type="button">Active Filter</button>
+        </form>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Shubham Mendpara</strong></td>
+                        <td>25cs044@charusat.edu.in</td>
+                        <td>9876543210</td>
+                        <td><span class="badge badge-green">Computer Engineering</span></td>
+                        <td>2nd Year</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Aarav Patel</strong></td>
+                        <td>aarav.ce@charusat.edu.in</td>
+                        <td>9823456789</td>
+                        <td><span class="badge badge-green">Computer Engineering</span></td>
+                        <td>2nd Year</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Harshil Dave</strong></td>
+                        <td>harshil.ai@charusat.edu.in</td>
+                        <td>9899001122</td>
+                        <td><span class="badge badge-green">Computer Engineering</span></td>
+                        <td>1st Year</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="code-box">
-            <strong>Executed Prepared Statement:</strong><br>
-            <code>$stmt = $pdo->prepare("SELECT r.*, s.full_name, e.title FROM registrations r INNER JOIN students s ON r.student_id = s.student_id INNER JOIN events e ON r.event_id = e.event_id WHERE r.status = :status");</code><br>
-            <code>$stmt->bindParam(':status', $status, PDO::PARAM_STR);</code><br>
-            <code>$stmt->execute();</code>
+        <div class="code-snippet">
+            <strong>Executed PHP PDO Code:</strong><br>
+            $stmt = $pdo-&gt;prepare("SELECT student_id, full_name, email, phone, department, year_of_study FROM students WHERE department = ?");<br>
+            $stmt-&gt;execute([$selectedDept]); // Bound parameter safely passed to MySQL driver
         </div>
     </div>
 

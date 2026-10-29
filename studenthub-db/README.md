@@ -27,9 +27,10 @@ studenthub-db/
 |    full_name     |             | FK student_id      |             |    event_name    |
 |    email (UQ)    |             | FK event_id        |             |    event_date    |
 |    phone         |             |    registered_at   |             |    venue         |
-|    department    |             | UQ (stu_id, evt_id)|             |    description   |
-|    year_of_study |             +--------------------+             +------------------+
-+------------------+
+|    department    |             |    status          |             |    organizer_club|
+|    year_of_study |             | UQ(stu_id, evt_id) |             |    max_seats     |
++------------------+             +--------------------+             |    description   |
+                                                                    +------------------+
 ```
 
 ### Cardinality:
