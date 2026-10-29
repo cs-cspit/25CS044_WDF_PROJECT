@@ -191,6 +191,27 @@ tr:hover td {
     color: #7e22ce;
 }
 
+.btn-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    background: var(--primary);
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-register:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
 .code-snippet {
     background: #0f172a;
     color: #f8fafc;

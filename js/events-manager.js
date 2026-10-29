@@ -124,6 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                     <span class="status-pill status-${item.status.toLowerCase()}">${item.status}</span>
                 </td>
+                <td>
+                    ${item.status.toLowerCase() === 'closed'
+                        ? `<button type="button" class="btn-register disabled" disabled>Closed</button>`
+                        : `<a href="../php-form-handling/register.php?event_id=${encodeURIComponent(item.id)}&event_name=${encodeURIComponent(item.name)}" class="btn-register">Register</a>`
+                    }
+                </td>
             </tr>
         `).join('');
 

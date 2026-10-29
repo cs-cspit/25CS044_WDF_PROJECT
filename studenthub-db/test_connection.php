@@ -184,6 +184,7 @@ try {
                         <th>Venue</th>
                         <th>Max Seats</th>
                         <th>Description</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,6 +197,9 @@ try {
                             <td><?= htmlspecialchars($row['venue'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string)$row['max_seats'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['description'] ?? '-', ENT_QUOTES, 'UTF-8') ?></td>
+                            <td>
+                                <a href="../php-form-handling/register.php?event_id=<?= urlencode((string)$row['event_id']) ?>&event_name=<?= urlencode($row['event_name']) ?>" class="btn-register">Register</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

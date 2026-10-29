@@ -90,6 +90,33 @@
         .status-upcoming { background: #fef3c7; color: #854d0e; }
         .status-closed { background: #fee2e2; color: #991b1b; }
 
+        .btn-register {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 14px;
+            background: #0a66ff;
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-register:hover {
+            background: #0052cc;
+            transform: translateY(-1px);
+        }
+
+        .btn-register.disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
         .pagination-container {
             display: flex;
             justify-content: center;
@@ -182,6 +209,7 @@
                     <th scope="col">Venue</th>
                     <th scope="col">Capacity</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody id="events-tbody">
