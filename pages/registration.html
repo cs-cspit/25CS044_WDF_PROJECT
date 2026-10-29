@@ -3,105 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration</title>
+    <title>Student Registration | StudentHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/responsive.css">
     <style>
-        .register-container { max-width:700px; margin:40px auto; padding:24px; background:var(--panel); border-radius:8px; }
-        .form-row { display:flex; gap:12px; }
-        .form-row .field { flex:1; }
-        .error { color:var(--danger); font-size:0.9rem; margin-top:4px; }
-        .strength { height:8px; border-radius:4px; background:#eee; overflow:hidden; }
-        .strength > i { display:block; height:100%; width:0%; background:green; transition:width 0.2s ease; }
+        .register-container {
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 32px;
+            background: var(--surface, #ffffff);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border, #e2e8f0);
+        }
+
+        :where(html.dark) .register-container,
+        :where(body.dark) .register-container {
+            background: #0f172a;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .register-container h2 {
+            margin-bottom: 6px;
+            color: var(--primary, #0a66ff);
+        }
+
+        .subtitle {
+            color: var(--gray, #64748b);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .field {
+            flex: 1;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border, #cbd5e1);
+            background: var(--surface, #ffffff);
+            color: var(--text, #1e293b);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        :where(html.dark) .field input,
+        :where(html.dark) .field select,
+        :where(body.dark) .field input,
+        :where(body.dark) .field select {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--primary, #0a66ff);
+            box-shadow: 0 0 0 3px rgba(10, 102, 255, 0.15);
+        }
+
+        .field input[aria-invalid="true"],
+        .field select[aria-invalid="true"] {
+            border-color: #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .error {
+            color: #ef4444;
+            font-size: 0.84rem;
+            margin-top: 4px;
+            min-height: 18px;
+            font-weight: 500;
+        }
+
+        /* Password strength progress */
+        .strength {
+            height: 6px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        :where(html.dark) .strength,
+        :where(body.dark) .strength {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .strength > i {
+            display: block;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-label {
+            display: block;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            color: #64748b;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 18px;
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-refresh {
+            background: var(--surface, #f1f5f9);
+            border: 1px solid var(--border, #cbd5e1);
+            color: var(--text, #1e293b);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: background 0.2s ease;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <header style="margin-bottom:20px;">
         <div class="logo">
-            <img src="../images/logo.png" alt="Logo">
+            <img src="../images/logo.png" alt="StudentHub Logo">
             <div>
-                <h2>Student Portal</h2>
+                <h2>StudentHub</h2>
+                <p>Academic Information System</p>
             </div>
         </div>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="../index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+            <a href="registration.html" aria-current="page">Register</a>
+            <a href="../index.html#login">Login</a>
+        </nav>
     </header>
 
     <main class="register-container">
         <h2>Student Registration</h2>
+        <p class="subtitle">Fill out the details below to create your student portal account.</p>
 
         <form id="registration-form" novalidate>
+            <!-- Name & Email -->
             <div class="form-row">
                 <div class="field">
-                    <label for="name">Full Name</label>
-                    <input id="name" name="name" type="text" required>
-                    <div class="error" id="err-name"></div>
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input id="name" name="name" type="text" placeholder="e.g. John Doe" aria-describedby="err-name" required>
+                    <div class="error" id="err-name" role="alert" aria-live="polite"></div>
                 </div>
                 <div class="field">
-                    <label for="email">Email</label>
-                    <input id="email" name="email" type="email" required>
-                    <div class="error" id="err-email"></div>
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input id="email" name="email" type="email" placeholder="student@charusat.edu.in" aria-describedby="err-email" required>
+                    <div class="error" id="err-email" role="alert" aria-live="polite"></div>
                 </div>
             </div>
 
-            <div style="margin-top:12px;">
-                <label for="mobile">Mobile Number</label>
-                <input id="mobile" name="mobile" type="tel" placeholder="10-digit mobile" required>
-                <div class="error" id="err-mobile"></div>
+            <!-- Mobile -->
+            <div class="field" style="margin-top:12px;">
+                <label for="mobile">Mobile Number <span class="required">*</span></label>
+                <input id="mobile" name="mobile" type="tel" maxlength="10" placeholder="10-digit mobile number" aria-describedby="err-mobile" required>
+                <div class="error" id="err-mobile" role="alert" aria-live="polite"></div>
             </div>
 
-            <div style="margin-top:12px;" class="form-row">
+            <!-- Password & Confirm Password -->
+            <div class="form-row" style="margin-top:12px;">
                 <div class="field">
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" required>
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input id="password" name="password" type="password" placeholder="At least 8 characters" aria-describedby="err-password" required>
                     <div class="strength" aria-hidden="true"><i id="strength-bar"></i></div>
-                    <div class="error" id="err-password"></div>
+                    <small id="strength-text" class="strength-label">Strength: None</small>
+                    <div class="error" id="err-password" role="alert" aria-live="polite"></div>
                 </div>
                 <div class="field">
-                    <label for="confirm">Confirm Password</label>
-                    <input id="confirm" name="confirm" type="password" required>
-                    <div class="error" id="err-confirm"></div>
+                    <label for="confirm">Confirm Password <span class="required">*</span></label>
+                    <input id="confirm" name="confirm" type="password" placeholder="Re-enter password" aria-describedby="err-confirm" required>
+                    <div class="error" id="err-confirm" role="alert" aria-live="polite"></div>
                 </div>
             </div>
 
-            <div style="margin-top:12px;" class="form-row">
+            <!-- Course & Year -->
+            <div class="form-row" style="margin-top:12px;">
                 <div class="field">
-                    <label for="course">Course</label>
-                    <select id="course" name="course" required>
+                    <label for="course">Course <span class="required">*</span></label>
+                    <select id="course" name="course" aria-describedby="err-course" required>
                         <option value="">Select course</option>
-                        <option>Computer Engineering</option>
-                        <option>Information Technology</option>
-                        <option>Electronics</option>
+                        <option value="CE">Computer Engineering</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="EC">Electronics & Communication</option>
+                        <option value="AIML">Artificial Intelligence & ML</option>
                     </select>
-                    <div class="error" id="err-course"></div>
+                    <div class="error" id="err-course" role="alert" aria-live="polite"></div>
                 </div>
                 <div class="field">
-                    <label for="year">Year</label>
-                    <select id="year" name="year" required>
+                    <label for="year">Year <span class="required">*</span></label>
+                    <select id="year" name="year" aria-describedby="err-year" required>
                         <option value="">Select year</option>
-                        <option>1st Year</option>
-                        <option>2nd Year</option>
-                        <option>3rd Year</option>
-                        <option>4th Year</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
                     </select>
-                    <div class="error" id="err-year"></div>
+                    <div class="error" id="err-year" role="alert" aria-live="polite"></div>
                 </div>
             </div>
 
-            <fieldset style="margin-top:12px; border:none; padding:0;">
-                <legend style="font-weight:600;">Gender</legend>
-                <label><input type="radio" name="gender" value="male"> Male</label>
-                <label><input type="radio" name="gender" value="female"> Female</label>
-                <label><input type="radio" name="gender" value="other"> Other</label>
-                <div class="error" id="err-gender"></div>
+            <!-- Gender -->
+            <fieldset style="margin-top:14px; border:none; padding:0;">
+                <legend style="font-weight:600; margin-bottom:6px;">Gender <span class="required">*</span></legend>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male"> Male</label>
+                    <label><input type="radio" name="gender" value="female"> Female</label>
+                    <label><input type="radio" name="gender" value="other"> Other</label>
+                </div>
+                <div class="error" id="err-gender" role="alert" aria-live="polite"></div>
             </fieldset>
 
-            <div style="margin-top:12px;">
-                <label><input type="checkbox" id="terms"> I accept the terms and conditions</label>
-                <div class="error" id="err-terms"></div>
+            <!-- Advanced Extension: Canvas CAPTCHA -->
+            <div class="field" style="margin-top:16px;">
+                <label for="captcha-input">Security Verification (CAPTCHA) <span class="required">*</span></label>
+                <div class="captcha-box">
+                    <canvas id="captcha-canvas" width="140" height="42" style="border-radius:6px; border:1px solid #cbd5e1; vertical-align:middle;"></canvas>
+                    <button type="button" id="refresh-captcha" class="btn-refresh" title="Refresh CAPTCHA" aria-label="Refresh Captcha">🔄</button>
+                    <input id="captcha-input" type="text" placeholder="Enter characters" style="max-width:180px;" aria-describedby="err-captcha" required>
+                </div>
+                <div class="error" id="err-captcha" role="alert" aria-live="polite"></div>
             </div>
 
-            <div style="margin-top:16px; display:flex; gap:12px;">
+            <!-- Terms -->
+            <div style="margin-top:16px;">
+                <label>
+                    <input type="checkbox" id="terms" required>
+                    I accept the <a href="#" target="_blank">terms and conditions</a> <span class="required">*</span>
+                </label>
+                <div class="error" id="err-terms" role="alert" aria-live="polite"></div>
+            </div>
+
+            <!-- Buttons -->
+            <div style="margin-top:20px; display:flex; gap:12px;">
                 <button type="submit">Register</button>
-                <a href="../index.html"><button type="button">Cancel</button></a>
+                <a href="../index.html"><button type="button" style="background:#64748b;">Cancel</button></a>
             </div>
         </form>
     </main>
