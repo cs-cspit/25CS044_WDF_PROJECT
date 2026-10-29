@@ -1,43 +1,42 @@
 <?php
 /**
- * Practical 8: Secure Database Connection using PHP Data Objects (PDO)
+ * Practical 8: Secure Database Connection
  * File: db.php
  *
  * Requirements:
- * - Secure PDO connection
- * - Try-catch error handling
- * - UTF-8 character encoding
- * - Exception error mode enabled
- * - Emulated prepared statements turned OFF for enhanced SQL Injection protection
+ * - Credentials defined at top
+ * - charset utf8mb4
+ * - PDO::ATTR_ERRMODE => ERRMODE_EXCEPTION
+ * - ATTR_DEFAULT_FETCH_MODE => FETCH_ASSOC
+ * - ATTR_EMULATE_PREPARES => false
+ * - try-catch logging real error with error_log() and showing only generic message
  */
 
-// Database configuration settings
-$db_host = 'localhost';
-$db_port = '3306';
-$db_name = 'studenthub_db';
-$db_user = 'root';        // Default XAMPP username
-$db_pass = '';            // Default XAMPP password is empty
+// Database Connection Configuration
+$host = 'localhost';
+$port = '3306';
+$dbname = 'studenthub';
+$user = 'root';
+$pass = '';
 
-// Data Source Name (DSN)
-$dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4";
+$dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
 
-// PDO driver options
 $options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Throw exceptions on SQL errors
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,        // Return associative arrays
-    PDO::ATTR_EMULATE_PREPARES   => false,                  // True native prepared statements
-    PDO::ATTR_PERSISTENT         => false                   // Non-persistent connection
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+    PDO::ATTR_PERSISTENT         => false
 ];
 
 try {
-    // Instantiate PDO connection
-    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+    $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
-    // Graceful error handling (logs actual error and outputs user-friendly response)
-    error_log("Database Connection Error: " . $e->getMessage());
-    die(json_encode([
-        'status'  => 'error',
-        'message' => 'Database connection failed. Please ensure MySQL is started in XAMPP.',
-        'details' => $e->getMessage()
-    ]));
+    // Log the real error to server log (never expose credentials or raw exception to client)
+    error_log("[Database Error] " . $e->getMessage());
+
+    // Show only generic user-friendly message
+    die('<div style="font-family:sans-serif; background:#fee2e2; color:#991b1b; padding:18px; border-radius:8px; margin:20px auto; max-width:600px; border:1px solid #fecaca;">
+            <strong>Unable to connect to the database.</strong><br>
+            Please verify that MySQL is started in your XAMPP Control Panel and database <code>studenthub</code> exists.
+         </div>');
 }
