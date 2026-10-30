@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 11: Interactive Test Report &amp; Screenshot Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-10/style.css">
+    <style>
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 7px 12px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .status-badge-active { background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.78rem; }
+        .status-badge-inactive { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.78rem; }
+
+        .btn-act { padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-block; }
+        .btn-act-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .btn-act-red { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        /* Excel Mockup */
+        .excel-window {
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .excel-ribbon {
+            background: #107c41;
+            color: #ffffff;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .excel-toolbar {
+            background: #f3f4f6;
+            padding: 6px 14px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.8rem;
+            color: #374151;
+            display: flex;
+            gap: 16px;
+        }
+
+        .excel-grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+        }
+
+        .excel-grid th, .excel-grid td {
+            border: 1px solid #d1d5db;
+            padding: 6px 10px;
+            text-align: left;
+        }
+
+        .excel-grid th {
+            background: #e5e7eb;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        .excel-row-header {
+            background: #f3f4f6;
+            color: #6b7280;
+            text-align: center !important;
+            width: 35px;
+            font-size: 9pt;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Bar for Switching Test Cases -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="showTab('t1')">1. Student Records Table</button>
+        <button class="tab-btn" onclick="showTab('t2')">2. Successful Add Student</button>
+        <button class="tab-btn" onclick="showTab('t3')">3. Successful Update Student</button>
+        <button class="tab-btn" onclick="showTab('t4')">4. Search Functionality</button>
+        <button class="tab-btn" onclick="showTab('t5')">5. Course-wise Filtering</button>
+        <button class="tab-btn" onclick="showTab('t6')">6. Delete Confirmation Message</button>
+        <button class="tab-btn" onclick="showTab('t7')">7. Soft Delete (Inactive Status)</button>
+        <button class="tab-btn" onclick="showTab('t8')">8. Success/Error Messages</button>
+        <button class="tab-btn" onclick="showTab('t9')">9. Exported CSV in Excel</button>
+    </div>
+
+    <!-- 1. Student Records Table -->
+    <div id="tab-t1" class="tab-content active">
+        <div class="container">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Student Records Table (<code>students</code>)</h2>
+                    <span class="badge badge-student">All Records</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Email Address</th>
+                                <th>Phone</th>
+                                <th>Department</th>
+                                <th>Course</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>25CS044</strong></td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td>9876543210</td>
+                                <td>Computer Engineering</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>25CS001</strong></td>
+                                <td>Aarav Patel</td>
+                                <td>aarav.ce@charusat.edu.in</td>
+                                <td>9823456789</td>
+                                <td>Computer Engineering</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>25IT014</strong></td>
+                                <td>Bhavya Shah</td>
+                                <td>bhavya.it@charusat.edu.in</td>
+                                <td>9811223344</td>
+                                <td>Information Technology</td>
+                                <td><span class="badge badge-purple">B.Tech IT</span></td>
+                                <td>3rd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>25EC032</strong></td>
+                                <td>Diya Joshi</td>
+                                <td>diya.ec@charusat.edu.in</td>
+                                <td>9877889900</td>
+                                <td>Electronics &amp; Comm.</td>
+                                <td><span class="badge badge-purple">B.Tech EC</span></td>
+                                <td>4th Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Successful Addition of a New Student -->
+    <div id="tab-t2" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div><strong>Student 'Yash Patel' (25CS099) added successfully!</strong> Row inserted into MySQL table with status: active.</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Student Records Table</h2>
+                    <small>Showing newly inserted record</small>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Course</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#f0fdf4;">
+                                <td><strong>25CS099</strong></td>
+                                <td><strong>Yash Patel</strong></td>
+                                <td>yash.ce@charusat.edu.in</td>
+                                <td>9898012345</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>25CS044</td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td>9876543210</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Successful Update of Student Details -->
+    <div id="tab-t3" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div><strong>Student details for 'Shubham Mendpara' updated successfully!</strong> Contact and academic info refreshed.</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Updated Record View</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Updated Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#eff6ff;">
+                                <td><strong>25CS044</strong></td>
+                                <td><strong>Shubham Mendpara</strong></td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td><strong>9998887770</strong> (Updated)</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><small>2026-10-30 12:45:00</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Search Functionality -->
+    <div id="tab-t4" class="tab-content">
+        <div class="container">
+            <div style="background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; align-items:center;">
+                <input type="text" class="form-control" value="Shubham" style="max-width:300px;" readonly>
+                <button type="button" class="btn-primary" style="width:auto; padding:8px 18px;">Search</button>
+                <span style="font-size:0.88rem; color:#64748b;">Filtered by: <code>WHERE full_name LIKE '%Shubham%' OR roll_no LIKE '%Shubham%'</code></span>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Search Results for "Shubham" (1 Match)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Email Address</th>
+                                <th>Phone</th>
+                                <th>Department</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>25CS044</strong></td>
+                                <td><strong>Shubham Mendpara</strong></td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td>9876543210</td>
+                                <td>Computer Engineering</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td><span class="status-badge-active">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Course-wise Filtering -->
+    <div id="tab-t5" class="tab-content">
+        <div class="container">
+            <div style="background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; align-items:center;">
+                <label style="font-size:0.9rem; font-weight:600;">Filter by Course:</label>
+                <select class="form-control" style="max-width:240px;">
+                    <option selected>B.Tech CSE</option>
+                </select>
+                <span style="font-size:0.88rem; color:#64748b;">Query: <code>WHERE course = 'B.Tech CSE'</code></span>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Filtered Students (Course: B.Tech CSE)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>25CS044</strong></td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>25CS001</strong></td>
+                                <td>Aarav Patel</td>
+                                <td>aarav.ce@charusat.edu.in</td>
+                                <td><span class="badge badge-purple">B.Tech CSE</span></td>
+                                <td>2nd Year</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Delete Confirmation Message -->
+    <div id="tab-t6" class="tab-content">
+        <div class="container" style="max-width: 600px; margin-top: 40px;">
+            <div class="card" style="border: 2px solid #f87171; box-shadow: 0 10px 25px rgba(220, 38, 38, 0.1);">
+                <div style="font-size: 36px; text-align:center; margin-bottom: 12px;">⚠️</div>
+                <h2 style="text-align: center; color: #dc2626; margin-bottom: 8px;">Delete Confirmation</h2>
+                <p style="text-align: center; font-size: 0.95rem; color: #475569; margin-bottom: 24px;">
+                    Are you sure you want to soft delete student <strong>'Rohan Raval'</strong> (Roll No: 25ME021)?<br>
+                    <small style="color: #64748b;">Note: The record will not be permanently deleted from the database. Its status will simply be marked as <code>inactive</code>.</small>
+                </p>
+                <div style="display:flex; justify-content:center; gap:14px;">
+                    <button type="button" class="btn-act btn-act-red" style="padding:10px 24px; font-size:0.92rem;">Confirm Soft Delete</button>
+                    <button type="button" class="btn-act btn-act-blue" style="padding:10px 24px; font-size:0.92rem;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Successful Soft Delete (status changed to inactive) -->
+    <div id="tab-t7" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div><strong>Student record #6 successfully soft-deleted (status marked as inactive).</strong></div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Student Records (Soft-Deleted Inactive Status View)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Full Name</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>25CS044</td>
+                                <td>Shubham Mendpara</td>
+                                <td>B.Tech CSE</td>
+                                <td><span class="status-badge-active">Active</span></td>
+                                <td><span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr style="background:#fff1f2;">
+                                <td><strong>25ME021</strong></td>
+                                <td><strong style="color:#991b1b;">Rohan Raval</strong></td>
+                                <td>B.Tech ME</td>
+                                <td><span class="status-badge-inactive">Inactive (Soft-Deleted)</span></td>
+                                <td><span class="btn-act" style="background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;">Restore</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Success / Error Messages -->
+    <div id="tab-t8" class="tab-content">
+        <div class="container" style="max-width: 750px;">
+            <div class="alert alert-success">
+                <span style="font-size:1.4rem;">✅</span>
+                <div>
+                    <strong>Success Message:</strong><br>
+                    Student details for 'Shubham Mendpara' updated successfully!
+                </div>
+            </div>
+            <div class="alert alert-danger" style="margin-top:20px;">
+                <span style="font-size:1.4rem;">⚠️</span>
+                <div>
+                    <strong>Error Message:</strong><br>
+                    Error: Roll number or email already exists in records.
+                </div>
+            </div>
+            <div class="alert alert-info" style="margin-top:20px;">
+                <span style="font-size:1.4rem;">ℹ️</span>
+                <div>
+                    <strong>System Flash:</strong><br>
+                    Student records exported to Excel CSV successfully.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Exported CSV File Opened in Excel -->
+    <div id="tab-t9" class="tab-content">
+        <div class="container">
+            <div class="excel-window">
+                <div class="excel-ribbon">
+                    <span>📗 Excel — StudentHub_Students_Export.csv</span>
+                    <span style="font-size:0.8rem; background:rgba(255,255,255,0.2); padding:3px 8px; border-radius:4px;">CSV File &bull; UTF-8 BOM</span>
+                </div>
+                <div class="excel-toolbar">
+                    <span>File</span> &bull; <span>Home</span> &bull; <span>Insert</span> &bull; <span>Page Layout</span> &bull; <span>Formulas</span> &bull; <span>Data</span>
+                </div>
+                <div style="overflow-x: auto; padding: 10px;">
+                    <table class="excel-grid">
+                        <thead>
+                            <tr>
+                                <th class="excel-row-header"></th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <th>H</th>
+                            </tr>
+                            <tr>
+                                <th class="excel-row-header">1</th>
+                                <th>Student ID</th>
+                                <th>Roll Number</th>
+                                <th>Full Name</th>
+                                <th>College Email</th>
+                                <th>Phone Number</th>
+                                <th>Course</th>
+                                <th>Year of Study</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="excel-row-header">2</td>
+                                <td>1</td>
+                                <td>25CS044</td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td>9876543210</td>
+                                <td>B.Tech CSE</td>
+                                <td>2nd Year</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td class="excel-row-header">3</td>
+                                <td>2</td>
+                                <td>25CS001</td>
+                                <td>Aarav Patel</td>
+                                <td>aarav.ce@charusat.edu.in</td>
+                                <td>9823456789</td>
+                                <td>B.Tech CSE</td>
+                                <td>2nd Year</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td class="excel-row-header">4</td>
+                                <td>3</td>
+                                <td>25IT014</td>
+                                <td>Bhavya Shah</td>
+                                <td>bhavya.it@charusat.edu.in</td>
+                                <td>9811223344</td>
+                                <td>B.Tech IT</td>
+                                <td>3rd Year</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td class="excel-row-header">5</td>
+                                <td>4</td>
+                                <td>25EC032</td>
+                                <td>Diya Joshi</td>
+                                <td>diya.ec@charusat.edu.in</td>
+                                <td>9877889900</td>
+                                <td>B.Tech EC</td>
+                                <td>4th Year</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td class="excel-row-header">6</td>
+                                <td>5</td>
+                                <td>25AI067</td>
+                                <td>Harshil Dave</td>
+                                <td>harshil.ai@charusat.edu.in</td>
+                                <td>9899001122</td>
+                                <td>B.Tech AI-ML</td>
+                                <td>1st Year</td>
+                                <td>Active</td>
+                            </tr>
+                            <tr>
+                                <td class="excel-row-header">7</td>
+                                <td>6</td>
+                                <td>25ME021</td>
+                                <td>Rohan Raval</td>
+                                <td>rohan.mech@charusat.edu.in</td>
+                                <td>9844556677</td>
+                                <td>B.Tech ME</td>
+                                <td>4th Year</td>
+                                <td>Inactive</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
