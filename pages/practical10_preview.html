@@ -163,10 +163,31 @@
                     <div>Welcome back, System Administrator (admin@charusat.edu.in). Session ID: <code>adm1n_48bf9a22d710ac8b</code></div>
                 </div>
             </div>
-            <div class="card">
+            <!-- Dynamic Stats Summary Cards -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 22px;">
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                    <div style="font-size:2rem; font-weight:700; color:#0a66ff;">3</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:#64748b; margin-top:4px;">👥 Total Registered Users</div>
+                </div>
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                    <div style="font-size:2rem; font-weight:700; color:#166534;">2</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:#64748b; margin-top:4px;">🎓 Enrolled Students</div>
+                </div>
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                    <div style="font-size:2rem; font-weight:700; color:#8b5cf6;">4</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:#64748b; margin-top:4px;">📅 Active Campus Events</div>
+                </div>
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                    <div style="font-size:2rem; font-weight:700; color:#dc2626;">6</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:#64748b; margin-top:4px;">🛡️ Recorded Audit Logs</div>
+                </div>
+            </div>
+
+            <!-- 1. Registered Users Table (Latest Registrations) -->
+            <div class="card" style="margin-bottom: 22px;">
                 <div class="card-title">
-                    <h2>Registered Users &amp; Assigned Roles (<code>user_registration.sql</code>)</h2>
-                    <small>Admin Directory</small>
+                    <h2>Registered Users &amp; Latest Registrations (<code>users</code>)</h2>
+                    <small>Admin Directory &bull; Dynamic Stats</small>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -186,7 +207,7 @@
                                 <td>System Administrator</td>
                                 <td>admin@charusat.edu.in</td>
                                 <td><span class="badge badge-admin">ADMIN</span></td>
-                                <td>active</td>
+                                <td><span style="color:#166534; font-weight:600;">Active</span></td>
                                 <td><small>2026-10-30 01:45:00</small></td>
                             </tr>
                             <tr>
@@ -194,7 +215,7 @@
                                 <td>Shubham Mendpara</td>
                                 <td>25cs044@charusat.edu.in</td>
                                 <td><span class="badge badge-student">STUDENT</span></td>
-                                <td>active</td>
+                                <td><span style="color:#166534; font-weight:600;">Active</span></td>
                                 <td><small>2026-10-30 01:50:12</small></td>
                             </tr>
                             <tr>
@@ -202,8 +223,72 @@
                                 <td>Aarav Patel</td>
                                 <td>aarav.ce@charusat.edu.in</td>
                                 <td><span class="badge badge-student">STUDENT</span></td>
-                                <td>active</td>
+                                <td><span style="color:#166534; font-weight:600;">Active</span></td>
                                 <td><small>2026-10-30 01:52:45</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2. Recorded Audit Logs Table -->
+            <div class="card">
+                <div class="card-title">
+                    <h2>Recorded Security &amp; Admin Audit Trail (<code>audit_logs</code> Table)</h2>
+                    <span class="badge badge-purple">Security Verification</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Log ID</th>
+                                <th>User / Actor</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>IP Address</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#101</strong></td>
+                                <td>System Administrator</td>
+                                <td><span class="badge badge-admin">LOGIN_SUCCESS</span></td>
+                                <td>Admin authenticated successfully with password_verify()</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small>2026-10-30 01:45:02</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#102</strong></td>
+                                <td>Shubham Mendpara</td>
+                                <td><span class="badge badge-student">LOGIN_SUCCESS</span></td>
+                                <td>Student logged in; Session ID regenerated</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small>2026-10-30 01:50:15</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#103</strong></td>
+                                <td>Shubham Mendpara</td>
+                                <td><span style="background:#fee2e2; color:#991b1b; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">UNAUTHORIZED_ACCESS</span></td>
+                                <td>Blocked student from accessing admin_dashboard.php (HTTP 403)</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small>2026-10-30 01:51:30</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#104</strong></td>
+                                <td>System Administrator</td>
+                                <td><span class="badge badge-purple">EVENT_CREATE</span></td>
+                                <td>Published campus event: 'National Coding Hackathon 2026'</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small>2026-10-30 02:10:00</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#105</strong></td>
+                                <td>System Administrator</td>
+                                <td><span class="badge badge-purple">EVENT_UPDATE</span></td>
+                                <td>Updated venue to 'Sports Arena Block B'</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small>2026-10-30 02:15:20</small></td>
                             </tr>
                         </tbody>
                     </table>
