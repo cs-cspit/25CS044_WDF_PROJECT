@@ -1,0 +1,7 @@
+"Student ID","Roll Number","Full Name","College Email","Phone Number","Department","Course","Year of Study","Status","Registration Date"
+"1","25CS044","Shubham Mendpara","25cs044@charusat.edu.in","9876543210","Computer Engineering","B.Tech CSE","2nd Year","Active","2026-10-30 01:45:00"
+"2","25CS001","Aarav Patel","aarav.ce@charusat.edu.in","9823456789","Computer Engineering","B.Tech CSE","2nd Year","Active","2026-10-30 01:50:12"
+"3","25IT014","Bhavya Shah","bhavya.it@charusat.edu.in","9811223344","Information Technology","B.Tech IT","3rd Year","Active","2026-10-30 01:52:45"
+"4","25EC032","Diya Joshi","diya.ec@charusat.edu.in","9877889900","Electronics & Comm.","B.Tech EC","4th Year","Active","2026-10-30 01:55:20"
+"5","25AI067","Harshil Dave","harshil.ai@charusat.edu.in","9899001122","Computer Engineering","B.Tech AI-ML","1st Year","Active","2026-10-30 01:58:30"
+"6","25ME021","Rohan Raval","rohan.mech@charusat.edu.in","9844556677","Mechanical Engineering","B.Tech ME","4th Year","Inactive","2026-10-30 02:00:10"
