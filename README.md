@@ -129,17 +129,16 @@ git commit -m "P5: Add registration form with regex validation"
 - HTML5 (semantic elements)
 - CSS3 (Grid, Flexbox, media queries, CSS variables)
 - JavaScript ES6+ (DOM, events, localStorage, regex)
-- Google Fonts — Poppins
+## Practical Coverage (Summary)
 
-<<<<<<< HEAD
+- **Practical 6:** Events Management with JSON Fetch & Dynamic UI (`pages/event-entry.html`, `js/events-manager.js`)
+- **Practical 7:** PHP Form Handling & Data Persistence (`php-form-handling/`)
+- **Practical 8:** StudentHub Database Design (3NF), MySQL PDO & Prepared Statements (`studenthub-db/`, `database/`)
+- **Practical 9:** Secure User Registration with MySQLi, BCRYPT Password Hashing, CSRF & Audit Logging (`practical-9/`)
+
 ## Author
-=======
 
-## License
-25cs044
->>>>>>> a8052a66444882109411420e83b39a911f692ca9
-
-25CS044
+**25CS044** — Charotar University of Science and Technology (CHARUSAT)
 
 ---
 © 2026 StudentHub — Empowering Students Through Technology
