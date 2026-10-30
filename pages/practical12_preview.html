@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 12: Interactive Test Report &amp; Screenshot Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-10/style.css">
+    <style>
+        .tabs-header {
+            display: flex;
+            gap: 7px;
+            justify-content: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 7px 11px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 26px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .poster-mock {
+            width: 70px;
+            height: 48px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .btn-act { padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-block; }
+        .btn-act-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .btn-act-red { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 36px 30px;
+            max-width: 520px;
+            margin: 30px auto;
+            text-align: center;
+            border: 1px solid #fecaca;
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Bar for Switching Test Cases -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="showTab('t1')">1. Admin Login &amp; Dashboard</button>
+        <button class="tab-btn" onclick="showTab('t2')">2. Successful Event Creation</button>
+        <button class="tab-btn" onclick="showTab('t3')">3. Event List with Posters</button>
+        <button class="tab-btn" onclick="showTab('t4')">4. Successful Event Update</button>
+        <button class="tab-btn" onclick="showTab('t5')">5. Successful Event Deletion</button>
+        <button class="tab-btn" onclick="showTab('t6')">6. Valid Poster Upload</button>
+        <button class="tab-btn" onclick="showTab('t7')">7. Invalid File Type Validation</button>
+        <button class="tab-btn" onclick="showTab('t8')">8. File Size Limit Validation</button>
+        <button class="tab-btn" onclick="showTab('t9')">9. Success &amp; Error Messages</button>
+        <button class="tab-btn" onclick="showTab('t10')">10. Unauthorized User Restriction</button>
+    </div>
+
+    <!-- 1. Admin Login and Dashboard -->
+    <div id="tab-t1" class="tab-content active">
+        <nav class="navbar">
+            <a href="#" class="navbar-brand">🛡️ StudentHub Admin Dashboard</a>
+            <div class="navbar-user">
+                <span>Logged in as: <strong>System Administrator</strong></span>
+                <span class="badge badge-admin">ADMIN</span>
+                <a href="#" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div><strong>Admin Authentication Verified!</strong> Welcome back, System Administrator (admin@charusat.edu.in).</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Admin Overview &bull; Campus Event Management</h2>
+                    <span class="badge badge-purple">Practical 12 Console</span>
+                </div>
+                <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:14px;">
+                    Full administrative control: Publish new events with high-resolution poster uploads, modify schedules, manage seat quotas, and delete expired activities.
+                </p>
+                <div style="display:flex; gap:16px;">
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px; flex:1; text-align:center;">
+                        <h3 style="font-size:2rem; color:#dc2626;">4</h3>
+                        <p style="font-size:0.85rem; color:#64748b; font-weight:600;">Active Campus Events</p>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px; flex:1; text-align:center;">
+                        <h3 style="font-size:2rem; color:#0a66ff;">100%</h3>
+                        <p style="font-size:0.85rem; color:#64748b; font-weight:600;">Posters Verified</p>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px; flex:1; text-align:center;">
+                        <h3 style="font-size:2rem; color:#166534;">RBAC</h3>
+                        <p style="font-size:0.85rem; color:#64748b; font-weight:600;">Admin Role Protected</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Successful Event Creation -->
+    <div id="tab-t2" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Successful event creation:</strong><br>
+                    'AI &amp; Deep Learning Symposium' scheduled for 2026-08-25 with poster uploaded (<code>uploads/poster_ai_symposium.png</code>).
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Event Published to Catalog</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Event Name</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#f0fdf4;">
+                                <td><div class="poster-mock">🖼️ AI Poster</div></td>
+                                <td><strong>AI &amp; Deep Learning Symposium</strong></td>
+                                <td><span class="badge badge-purple">Seminar</span></td>
+                                <td>📅 2026-08-25</td>
+                                <td>📍 Seminar Hall B</td>
+                                <td>120 seats</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Event List with Uploaded Posters -->
+    <div id="tab-t3" class="tab-content">
+        <div class="container">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Event List with Uploaded Posters</h2>
+                    <small>Database Table: <code>events</code> with <code>poster_path</code></small>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Event Name</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Organizer Club</th>
+                                <th>Capacity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="poster-mock">🖼️ Git Poster</div></td>
+                                <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                                <td><span class="badge badge-purple">Workshop</span></td>
+                                <td>📅 2026-07-15</td>
+                                <td>Lab 402, IT Building</td>
+                                <td>Git &amp; Open Source Club</td>
+                                <td>60 seats</td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="poster-mock">🖼️ CodeVerse</div></td>
+                                <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                                <td><span class="badge badge-purple">Technical</span></td>
+                                <td>📅 2026-07-20</td>
+                                <td>Main Auditorium</td>
+                                <td>Computer Engineering Dept</td>
+                                <td>150 seats</td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="poster-mock">🖼️ Web Dev</div></td>
+                                <td><strong>Web Dev Seminar: Modern Fullstack</strong></td>
+                                <td><span class="badge badge-purple">Seminar</span></td>
+                                <td>📅 2026-08-05</td>
+                                <td>Seminar Hall A</td>
+                                <td>Developer Student Club</td>
+                                <td>100 seats</td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="poster-mock">🖼️ Contest</div></td>
+                                <td><strong>Inter-College Coding Contest</strong></td>
+                                <td><span class="badge badge-purple">Competition</span></td>
+                                <td>📅 2026-08-18</td>
+                                <td>Computing Facility</td>
+                                <td>Competitive Programming Club</td>
+                                <td>120 seats</td>
+                                <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Successful Event Update -->
+    <div id="tab-t4" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Successful event update:</strong><br>
+                    'Git &amp; GitHub Hands-on Workshop' details refreshed successfully. Venue updated to <em>"Auditorium 1, Ground Floor"</em> and capacity increased to <em>80 seats</em>.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Updated Record View</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Event Name</th>
+                                <th>Venue</th>
+                                <th>Capacity</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#eff6ff;">
+                                <td><div class="poster-mock">🖼️ Git Poster</div></td>
+                                <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                                <td><strong>Auditorium 1, Ground Floor</strong> (Updated)</td>
+                                <td><strong>80 seats</strong> (Updated)</td>
+                                <td><small>2026-10-30 13:25:00</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Successful Event Deletion -->
+    <div id="tab-t5" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Successful event deletion:</strong><br>
+                    Event #4 ('Inter-College Coding Contest') was permanently removed from database and associated poster unlinked.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Event Catalog (Post-Deletion)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event ID</th>
+                                <th>Event Name</th>
+                                <th>Organizer</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1</td>
+                                <td>Git &amp; GitHub Hands-on Workshop</td>
+                                <td>Git &amp; Open Source Club</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>#2</td>
+                                <td>Hackathon 2026 - CodeVerse</td>
+                                <td>Computer Engineering Dept</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>#3</td>
+                                <td>Web Dev Seminar: Modern Fullstack</td>
+                                <td>Developer Student Club</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Valid Poster Upload -->
+    <div id="tab-t6" class="tab-content">
+        <div class="container" style="max-width:700px;">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Valid Poster Upload Validation</h2>
+                    <span class="badge badge-student">PASS</span>
+                </div>
+                <div class="alert alert-success">
+                    <span>✅</span>
+                    <div>
+                        <strong>Poster Verified:</strong> <code>codeverse_banner.png</code> (Size: 480 KB &bull; MIME: <code>image/png</code>).<br>
+                        Cryptographically stored at <code>practical-12/uploads/poster_1761828000_a4f10b.png</code>.
+                    </div>
+                </div>
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;">
+                    <strong>Security Verification Checklist:</strong><br>
+                    &bull; <strong>Extension match:</strong> <code>png</code> &isin; <code>['jpg', 'jpeg', 'png', 'webp']</code><br>
+                    &bull; <strong>MIME type detection:</strong> <code>finfo_file()</code> returned <code>image/png</code><br>
+                    &bull; <strong>Size verification:</strong> 491,520 bytes &lt; 2,097,152 bytes (2 MB limit)<br>
+                    &bull; <strong>Target directory:</strong> Moved via <code>move_uploaded_file()</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Invalid File Type Validation -->
+    <div id="tab-t7" class="tab-content">
+        <div class="container" style="max-width:700px;">
+            <div class="card" style="border-top:4px solid #dc2626;">
+                <div class="card-title">
+                    <h2>Invalid File Type Validation</h2>
+                    <span class="badge badge-admin">BLOCKED</span>
+                </div>
+                <div class="alert alert-danger">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Invalid file type validation:</strong><br>
+                        Only JPG, PNG, and WebP image files are allowed. Detected: <strong>'pdf'</strong> (MIME: <code>application/pdf</code>). Upload rejected.
+                    </div>
+                </div>
+                <div style="background:#fff1f2; border:1px dashed #fca5a5; border-radius:8px; padding:16px; font-size:0.9rem; color:#991b1b;">
+                    <strong>Server Security Rule:</strong><br>
+                    Executing non-image file uploads (e.g., <code>.pdf</code>, <code>.exe</code>, <code>.php</code>, <code>.sh</code>) is blocked at the MIME-verification layer to prevent Remote Code Execution (RCE).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. File Size Limit Validation -->
+    <div id="tab-t8" class="tab-content">
+        <div class="container" style="max-width:700px;">
+            <div class="card" style="border-top:4px solid #d97706;">
+                <div class="card-title">
+                    <h2>File Size Limit Validation</h2>
+                    <span class="badge" style="background:#fef3c7; color:#854d0e;">SIZE EXCEEDED</span>
+                </div>
+                <div class="alert alert-danger">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>File size limit exceeded:</strong><br>
+                        The poster must not exceed 2 MB. Uploaded file was <strong>4.82 MB</strong>. Upload rejected.
+                    </div>
+                </div>
+                <div style="background:#fefce8; border:1px solid #fef08a; border-radius:8px; padding:16px; font-size:0.9rem; color:#854d0e;">
+                    <strong>Enforced Threshold:</strong> <code>$file['size'] &gt; 2097152</code> bytes.<br>
+                    Protects server storage and network bandwidth from denial-of-service file uploads.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Success and Error Messages -->
+    <div id="tab-t9" class="tab-content">
+        <div class="container" style="max-width:750px;">
+            <div class="alert alert-success">
+                <span style="font-size:1.4rem;">✅</span>
+                <div>
+                    <strong>Success Message:</strong><br>
+                    Successful event creation: 'Hackathon 2026 - CodeVerse' scheduled with poster uploaded.
+                </div>
+            </div>
+            <div class="alert alert-danger" style="margin-top:20px;">
+                <span style="font-size:1.4rem;">⚠️</span>
+                <div>
+                    <strong>Error Message:</strong><br>
+                    File size limit exceeded: The poster must not exceed 2 MB. Uploaded file was 4.82 MB.
+                </div>
+            </div>
+            <div class="alert alert-info" style="margin-top:20px;">
+                <span style="font-size:1.4rem;">ℹ️</span>
+                <div>
+                    <strong>System Message:</strong><br>
+                    Event poster updated successfully.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. Unauthorized User Access Restriction -->
+    <div id="tab-t10" class="tab-content">
+        <div class="modal-card">
+            <div style="font-size: 52px; margin-bottom: 12px;">🚫</div>
+            <h1 style="color: #dc2626; font-size: 1.65rem; margin-bottom: 8px;">Unauthorized User Access Restriction</h1>
+            <p style="color: #64748b; font-size: 0.94rem; margin-bottom: 24px; line-height: 1.5;">
+                Access Denied! You do not have administrative privileges to manage campus events or upload posters. Your current authenticated role is <strong>student</strong>.
+            </p>
+            <a href="#" class="btn-act btn-act-blue" style="padding:10px 22px; font-size:0.9rem;">Return to Student View</a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
