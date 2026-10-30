@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 10 Interactive Preview &amp; Screenshot Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-10/style.css">
+    <style>
+        .tabs-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .error-card-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            padding: 36px 32px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08);
+        }
+
+        .modal-box .icon { font-size: 48px; margin-bottom: 12px; }
+        .modal-box h1 { color: #dc2626; font-size: 1.6rem; margin-bottom: 10px; }
+        .modal-box p { color: #64748b; font-size: 0.92rem; margin-bottom: 22px; }
+        .btn-act { display: inline-block; padding: 10px 22px; color: #fff; text-decoration: none; border-radius: 7px; font-weight: 600; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Bar for Switching Test Cases -->
+    <div class="tabs-bar">
+        <button class="tab-btn active" onclick="showTab('t1')">1. Successful Student Login</button>
+        <button class="tab-btn" onclick="showTab('t2')">2. Successful Admin Login</button>
+        <button class="tab-btn" onclick="showTab('t3')">3. Invalid Email/Password</button>
+        <button class="tab-btn" onclick="showTab('t4')">4. Student &rarr; Admin (Unauthorized)</button>
+        <button class="tab-btn" onclick="showTab('t5')">5. Admin &rarr; Student (Unauthorized)</button>
+        <button class="tab-btn" onclick="showTab('t6')">6. Successful Logout</button>
+        <button class="tab-btn" onclick="showTab('t7')">7. Access Denied After Logout</button>
+        <button class="tab-btn" onclick="showTab('t8')">8. Session Timeout</button>
+        <button class="tab-btn" onclick="showTab('t9')">9. Session ID Regeneration</button>
+    </div>
+
+    <!-- 1. Successful Student Login -->
+    <div id="tab-t1" class="tab-content active">
+        <nav class="navbar">
+            <a href="#" class="navbar-brand">🎓 StudentHub Student Portal</a>
+            <div class="navbar-user">
+                <span>Logged in as: <strong>Shubham Mendpara</strong></span>
+                <span class="badge badge-student">STUDENT</span>
+                <a href="#" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div>
+                    <strong>Student Authentication Verified!</strong>
+                    <div>Welcome back, Shubham Mendpara (25cs044@charusat.edu.in). Session ID: <code>s3ss10n_94bf01ea7a6c9d2e</code></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Campus Events Available for Registration</h2>
+                    <small>Student Access View</small>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event ID</th>
+                                <th>Event Title</th>
+                                <th>Organizer Club</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#1</strong></td>
+                                <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
+                                <td><span class="badge badge-purple">Git &amp; Open Source Club</span></td>
+                                <td>📅 2026-07-15</td>
+                                <td>📍 Lab 402, IT Building</td>
+                                <td><span class="badge badge-student">Open</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#2</strong></td>
+                                <td><strong>Hackathon 2026 - CodeVerse</strong></td>
+                                <td><span class="badge badge-purple">Computer Engineering Dept</span></td>
+                                <td>📅 2026-07-20</td>
+                                <td>📍 Main Auditorium</td>
+                                <td><span class="badge badge-student">Open</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Successful Admin Login -->
+    <div id="tab-t2" class="tab-content">
+        <nav class="navbar">
+            <a href="#" class="navbar-brand">🛡️ StudentHub Admin Console</a>
+            <div class="navbar-user">
+                <span>Logged in as: <strong>System Administrator</strong></span>
+                <span class="badge badge-admin">ADMIN</span>
+                <a href="#" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <div>
+                    <strong>Admin Authentication Verified!</strong>
+                    <div>Welcome back, System Administrator (admin@charusat.edu.in). Session ID: <code>adm1n_48bf9a22d710ac8b</code></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Registered Users &amp; Assigned Roles (<code>user_registration.sql</code>)</h2>
+                    <small>Admin Directory</small>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Account Status</th>
+                                <th>Registered At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#1</strong></td>
+                                <td>System Administrator</td>
+                                <td>admin@charusat.edu.in</td>
+                                <td><span class="badge badge-admin">ADMIN</span></td>
+                                <td>active</td>
+                                <td><small>2026-10-30 01:45:00</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#2</strong></td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td><span class="badge badge-student">STUDENT</span></td>
+                                <td>active</td>
+                                <td><small>2026-10-30 01:50:12</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#3</strong></td>
+                                <td>Aarav Patel</td>
+                                <td>aarav.ce@charusat.edu.in</td>
+                                <td><span class="badge badge-student">STUDENT</span></td>
+                                <td>active</td>
+                                <td><small>2026-10-30 01:52:45</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Invalid Email/Password Message -->
+    <div id="tab-t3" class="tab-content">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <h1 style="color:var(--primary);">🎓 StudentHub Portal</h1>
+                    <p>Practical 10: User Login &amp; Role-Based Access Control</p>
+                </header>
+                <div class="alert alert-danger">
+                    <span>⚠️</span>
+                    <div>Invalid email or password.</div>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" value="wrong.email@charusat.edu.in">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" value="WrongPassword123">
+                    </div>
+                    <button type="button" class="btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Student Attempting to Access Admin Dashboard -->
+    <div id="tab-t4" class="tab-content">
+        <div class="error-card-center">
+            <div class="modal-box">
+                <div class="icon">🚫</div>
+                <h1>Unauthorized Access</h1>
+                <p>Access Denied! The Admin Dashboard is restricted exclusively to administrators. Your current authenticated role is <strong>student</strong>.</p>
+                <a href="#" class="btn-act" style="background:#0a66ff;">Go to Student Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Admin Attempting to Access Student Dashboard -->
+    <div id="tab-t5" class="tab-content">
+        <div class="error-card-center">
+            <div class="modal-box">
+                <div class="icon">🚫</div>
+                <h1>Unauthorized Access</h1>
+                <p>Access Denied! The Student Dashboard is designated exclusively for enrolled students. Your current authenticated role is <strong>admin</strong>.</p>
+                <a href="#" class="btn-act" style="background:#dc2626;">Go to Admin Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Successful Logout -->
+    <div id="tab-t6" class="tab-content">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <h1 style="color:var(--primary);">🎓 StudentHub Portal</h1>
+                    <p>Practical 10: User Login &amp; Role-Based Access Control</p>
+                </header>
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <div>You have logged out successfully.</div>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Enter your password">
+                    </div>
+                    <button type="button" class="btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Dashboard Access Denied After Logout -->
+    <div id="tab-t7" class="tab-content">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <h1 style="color:var(--primary);">🎓 StudentHub Portal</h1>
+                    <p>Practical 10: User Login &amp; Role-Based Access Control</p>
+                </header>
+                <div class="alert alert-danger">
+                    <span>⚠️</span>
+                    <div>Access denied. Please log in first.</div>
+                </div>
+                <div style="font-size: 0.86rem; color: #64748b; margin-bottom: 16px; background: #fff1f2; padding: 10px; border-radius: 6px; border: 1px dashed #fecdd3;">
+                    <strong>Protected Route:</strong> Attempted to access <code>dashboard.php</code> without active session. Validated by <code>timeout.php</code> and redirected to login.
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Enter your password">
+                    </div>
+                    <button type="button" class="btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Session Timeout & Redirection to Login -->
+    <div id="tab-t8" class="tab-content">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <header class="auth-header">
+                    <h1 style="color:var(--primary);">🎓 StudentHub Portal</h1>
+                    <p>Practical 10: User Login &amp; Role-Based Access Control</p>
+                </header>
+                <div class="alert alert-warning">
+                    <span>⏳</span>
+                    <div>Your session has timed out due to inactivity. Please log in again.</div>
+                </div>
+                <div style="font-size: 0.86rem; color: #854d0e; margin-bottom: 16px; background: #fefce8; padding: 10px; border-radius: 6px; border: 1px solid #fef08a;">
+                    <strong>Inactivity Trigger:</strong> No activity detected for &gt; 900 seconds (15 minutes). <code>timeout.php</code> destroyed the session and removed session cookies.
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Enter your password">
+                    </div>
+                    <button type="button" class="btn-primary">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Session ID Regeneration After Successful Login -->
+    <div id="tab-t9" class="tab-content">
+        <div class="container" style="max-width: 800px;">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Session ID Regeneration (Defense Against Session Fixation)</h2>
+                    <span class="badge badge-purple">Security Verification</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+                    In accordance with OWASP security guidelines, when a user successfully authenticates in <code>authenticate.php</code>, the PHP function <code>session_regenerate_id(true)</code> is invoked. This immediately destroys the pre-login session ID and issues a brand-new cryptographically random session ID cookie.
+                </p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>Session ID (PHPSESSID)</th>
+                                <th>Authentication State</th>
+                                <th>Security Effect</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Pre-Login (Guest)</strong></td>
+                                <td><code>guest_sess_19a84f0bc210d</code></td>
+                                <td>Unauthenticated</td>
+                                <td>Initial anonymous session created when viewing login form.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Post-Login (Authenticated)</strong></td>
+                                <td><code style="color:#166534; font-weight:700;">auth_sess_78d10ac69fe31b</code></td>
+                                <td>Authenticated (student/admin)</td>
+                                <td><strong>Regenerated via <code>session_regenerate_id(true)</code></strong>. Previous session ID deleted.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background:#0f172a; color:#f8fafc; padding:16px; border-radius:8px; font-family:monospace; font-size:0.86rem; margin-top:20px;">
+                    // authenticate.php (Line 68):<br>
+                    if (password_verify($password, $user['password_hash'])) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<strong>session_regenerate_id(true);</strong> // Destroys old session ID &amp; prevents fixation<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;$_SESSION['user_id'] = (int)$user['user_id'];<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;$_SESSION['role'] = $user['role'];<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;header("Location: dashboard.php");<br>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
