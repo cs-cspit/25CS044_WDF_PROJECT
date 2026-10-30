@@ -482,6 +482,10 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;header("Location: dashboard.php");<br>
                     }
                 </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 10. Dedicated Audit Log Proof (Database & phpMyAdmin View) -->
     <div id="tab-t10" class="tab-content">
         <div class="container" style="max-width: 1050px;">
@@ -607,11 +611,19 @@
     </div>
 
     <script>
-        function showTab(tabId) {
+        function showTab(tabId, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            const targetBtn = btn || (window.event ? window.event.currentTarget || window.event.target : null) || document.querySelector(`[onclick*="'${tabId}'"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            const targetContent = document.getElementById('tab-' + tabId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
         }
     </script>
 </body>
