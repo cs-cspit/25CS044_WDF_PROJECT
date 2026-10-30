@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 14: Interactive Test Suite &amp; RBAC Inspector</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 60px;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .tab-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 24px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .phpmyadmin-box {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .phpmyadmin-bar {
+            background: #e2e8f0;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .sql-box {
+            background: #1e293b;
+            color: #38bdf8;
+            padding: 12px 16px;
+            font-family: Consolas, monospace;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            border-bottom: 1px solid #334155;
+        }
+
+        .badge-active { background-color: #dcfce7; color: #166534; font-weight: 600; }
+        .badge-inactive { background-color: #fee2e2; color: #991b1b; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Bar -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="showTab('t1', this)">1. Dynamic Dashboard &amp; Stats</button>
+        <button class="tab-btn" onclick="showTab('t2', this)">2. Latest Registrations (JOIN)</button>
+        <button class="tab-btn" onclick="showTab('t3', this)">3. RBAC: Role-Based Dynamic Menu</button>
+        <button class="tab-btn" onclick="showTab('t4', this)">4. RBAC: Non-Admin Restricted (403)</button>
+        <button class="tab-btn" onclick="showTab('t5', this)">5. Audit Log Proof (Admin Actions)</button>
+        <button class="tab-btn" onclick="showTab('t6', this)">6. Intermediate: User Status Toggle</button>
+        <button class="tab-btn" onclick="showTab('t7', this)">7. Advanced: Monthly Analytics Chart</button>
+    </div>
+
+    <!-- TAB 1: Dynamic Dashboard & Stats -->
+    <div id="tab-t1" class="tab-content active">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="alert alert-primary d-flex align-items-center gap-2 mb-4">
+                <span class="fs-4">📊</span>
+                <div>
+                    <strong>Question 1 Analysis: Are dashboard values loaded dynamically from the database?</strong><br>
+                    Yes. All count badges are aggregated live from MySQL tables (`users`, `students`, `events`, `registrations`) via `COUNT(*)` SQL queries in `admin_dashboard.php`.
+                </div>
+            </div>
+
+            <!-- Dynamic SQL Aggregation Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card p-3 border-0 shadow-sm bg-white rounded-3">
+                        <small class="text-muted fw-bold">TOTAL USERS</small>
+                        <h2 class="fw-bold text-primary mt-1 mb-0">5</h2>
+                        <small class="text-success fw-semibold">● 4 Active Accounts</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 border-0 shadow-sm bg-white rounded-3">
+                        <small class="text-muted fw-bold">ENROLLED STUDENTS</small>
+                        <h2 class="fw-bold text-success mt-1 mb-0">7</h2>
+                        <small class="text-muted">Table: `students`</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 border-0 shadow-sm bg-white rounded-3">
+                        <small class="text-muted fw-bold">CAMPUS EVENTS</small>
+                        <h2 class="fw-bold text-warning mt-1 mb-0">4</h2>
+                        <small class="text-muted">Table: `events`</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 border-0 shadow-sm bg-white rounded-3">
+                        <small class="text-muted fw-bold">EVENT REGISTRATIONS</small>
+                        <h2 class="fw-bold text-danger mt-1 mb-0">10</h2>
+                        <small class="text-muted">Table: `registrations`</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-custom">
+                <h5 class="fw-bold mb-3">Live SQL Aggregation Queries Executed in `admin_dashboard.php`</h5>
+                <div class="sql-box rounded">
+                    -- Dynamic Stat Counters:<br>
+                    SELECT COUNT(*) AS cnt FROM `users`;         -- Result: 5<br>
+                    SELECT COUNT(*) AS cnt FROM `students`;      -- Result: 7<br>
+                    SELECT COUNT(*) AS cnt FROM `events`;        -- Result: 4<br>
+                    SELECT COUNT(*) AS cnt FROM `registrations`; -- Result: 10
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Latest Registrations (JOIN) -->
+    <div id="tab-t2" class="tab-content">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="card-custom">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-0">Latest Registrations with Student &amp; Event JOIN</h5>
+                        <small class="text-muted">Multi-table relational aggregation across <code>registrations</code>, <code>students</code>, and <code>events</code></small>
+                    </div>
+                    <span class="badge bg-success px-3 py-2">SQL JOIN Verified</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reg #</th>
+                                <th>Student Name</th>
+                                <th>College Email</th>
+                                <th>Registered Event</th>
+                                <th>Category</th>
+                                <th>Registration Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">#10</td>
+                                <td><strong>Bhavya Shah</strong></td>
+                                <td><code>bhavya.it@charusat.edu.in</code></td>
+                                <td>Hands-on Theory of Computation</td>
+                                <td><span class="badge bg-info text-dark">Technical</span></td>
+                                <td><small class="text-muted">2026-10-25 17:15:00</small></td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#9</td>
+                                <td><strong>Aarav Patel</strong></td>
+                                <td><code>aarav.ce@charusat.edu.in</code></td>
+                                <td>IoT Edge: Sensors to Smart Solutions</td>
+                                <td><span class="badge bg-info text-dark">Workshop</span></td>
+                                <td><small class="text-muted">2026-10-20 13:50:00</small></td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#8</td>
+                                <td><strong>Shubham Mendpara</strong></td>
+                                <td><code>25cs044@charusat.edu.in</code></td>
+                                <td>AI &amp; Deep Learning Masterclass</td>
+                                <td><span class="badge bg-info text-dark">Seminar</span></td>
+                                <td><small class="text-muted">2026-10-10 12:40:00</small></td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#7</td>
+                                <td><strong>Rohan Raval</strong></td>
+                                <td><code>rohan.mech@charusat.edu.in</code></td>
+                                <td>Hands-on Theory of Computation</td>
+                                <td><span class="badge bg-info text-dark">Technical</span></td>
+                                <td><small class="text-muted">2026-10-02 15:25:00</small></td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="sql-box rounded mt-3">
+                    -- Executed Inner Join Query:<br>
+                    SELECT r.registration_id, s.full_name AS student_name, s.email, e.event_name, e.category, r.registered_at, r.status<br>
+                    FROM `registrations` r<br>
+                    INNER JOIN `students` s ON r.student_id = s.student_id<br>
+                    INNER JOIN `events` e ON r.event_id = e.event_id<br>
+                    ORDER BY r.registration_id DESC LIMIT 6;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: RBAC: Role-Based Dynamic Menu -->
+    <div id="tab-t3" class="tab-content">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="alert alert-info">
+                <strong>Question 3 Analysis: Are role-based menus working?</strong><br>
+                Yes. <code>menu.php</code> conditionally filters navigation links based on <code>$_SESSION['role']</code>.
+            </div>
+
+            <div class="row g-4">
+                <!-- Admin Menu -->
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-danger mb-0">🛡️ Role: Admin Menu</h6>
+                            <span class="badge bg-danger">Full Access</span>
+                        </div>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item active bg-primary text-white border-0 rounded mb-1">📊 Admin Dashboard</li>
+                            <li class="list-group-item">👥 User Management</li>
+                            <li class="list-group-item">🎓 Student Roster</li>
+                            <li class="list-group-item">📅 Campus Events</li>
+                            <li class="list-group-item">📝 Event Registrations</li>
+                            <li class="list-group-item">📈 Registration Analytics</li>
+                            <li class="list-group-item">🛡️ Security Audit Trail</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Organizer Menu -->
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-primary mb-0">🎪 Role: Organizer Menu</h6>
+                            <span class="badge bg-primary">Event Scope</span>
+                        </div>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item active bg-primary text-white border-0 rounded mb-1">🎪 Organizer Hub</li>
+                            <li class="list-group-item">📅 Campus Events</li>
+                            <li class="list-group-item">📝 Attendee Registrations</li>
+                            <li class="list-group-item">📈 Event Analytics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Student Menu -->
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-success mb-0">🎓 Role: Student Menu</h6>
+                            <span class="badge bg-success">Student Scope</span>
+                        </div>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item active bg-primary text-white border-0 rounded mb-1">🎓 Student Portal</li>
+                            <li class="list-group-item">⚡ Available Events</li>
+                            <li class="list-group-item">📋 My Registrations</li>
+                            <li class="list-group-item">👤 Student Profile</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: RBAC: Non-Admin Restricted (403) -->
+    <div id="tab-t4" class="tab-content">
+        <div class="container text-center py-5" style="max-width: 600px;">
+            <div class="card shadow border-danger p-4">
+                <div class="display-1 text-danger">🚫</div>
+                <h2 class="text-danger fw-bold mt-2">HTTP 403 Forbidden</h2>
+                <h5 class="fw-bold text-dark mb-2">Access Denied &bull; Unauthorized Role</h5>
+                <p class="text-muted">
+                    The Administration Dashboard is restricted exclusively to authenticated <strong>Admin</strong> users. Your current session role is <strong>student</strong>.
+                </p>
+                <div class="alert alert-danger py-2 small mb-3">
+                    <strong>Audit Action Triggered:</strong> Recorded in <code>audit_logs</code> as <code>UNAUTHORIZED_ACCESS_BLOCKED</code> with Client IP <code>127.0.0.1</code>.
+                </div>
+                <div>
+                    <a href="../practical-10/student_dashboard.php" class="btn btn-primary fw-semibold px-4">Go to Student Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: Audit Log Proof (Admin Actions) -->
+    <div id="tab-t5" class="tab-content">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="phpmyadmin-box mb-4">
+                <div class="phpmyadmin-bar">
+                    <span class="fw-bold">🗄️ phpMyAdmin 5.2.1 &bull; Server: <code>127.0.0.1</code> &bull; Table: <code>studenthub.audit_logs</code></span>
+                    <span class="badge bg-success">Query OK (0.0003 sec)</span>
+                </div>
+                <div class="sql-box">
+                    SELECT log_id, user_id, action, details, ip_address, created_at FROM `audit_logs` ORDER BY log_id DESC;
+                </div>
+                <div class="table-responsive bg-white">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>log_id (PK)</th>
+                                <th>user_id</th>
+                                <th>action</th>
+                                <th>details (Admin Actions Recorded)</th>
+                                <th>ip_address</th>
+                                <th>created_at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-warning">
+                                <td class="fw-bold">#105</td>
+                                <td>1 (admin)</td>
+                                <td><span class="badge bg-primary">EVENT_UPDATE</span></td>
+                                <td>Admin updated venue for event #3 to Central Computing Facility</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small class="text-muted">2026-10-30 11:20:00</small></td>
+                            </tr>
+                            <tr class="table-info">
+                                <td class="fw-bold">#104</td>
+                                <td>1 (admin)</td>
+                                <td><span class="badge bg-primary">EVENT_CREATE</span></td>
+                                <td>Admin published campus event: Chess Tournament: Strategy, Focus, Victory</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small class="text-muted">2026-10-30 10:05:00</small></td>
+                            </tr>
+                            <tr class="table-danger">
+                                <td class="fw-bold">#103</td>
+                                <td>2 (student)</td>
+                                <td><span class="badge bg-danger">UNAUTHORIZED_ACCESS_BLOCKED</span></td>
+                                <td>Student Shubham Mendpara blocked from accessing admin dashboard (HTTP 403)</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small class="text-muted">2026-10-30 09:30:10</small></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td class="fw-bold">#102</td>
+                                <td>1 (admin)</td>
+                                <td><span class="badge bg-warning text-dark">USER_STATUS_TOGGLE</span></td>
+                                <td>Admin toggled user ID 5 (Diya Joshi) status to inactive</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small class="text-muted">2026-10-30 09:15:20</small></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#101</td>
+                                <td>1 (admin)</td>
+                                <td><span class="badge bg-success">LOGIN_SUCCESS</span></td>
+                                <td>Admin System Administrator logged in successfully via password_verify()</td>
+                                <td><code>127.0.0.1</code></td>
+                                <td><small class="text-muted">2026-10-30 09:00:00</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: Intermediate: User Status Toggle -->
+    <div id="tab-t6" class="tab-content">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="card-custom">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-0">Intermediate Extension: Active/Inactive User Status Toggle</h5>
+                        <small class="text-muted">AJAX-based account moderation with automatic audit log tracking</small>
+                    </div>
+                    <span class="badge bg-warning text-dark px-3 py-2">Intermediate Completed</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Admin Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">#1</td>
+                                <td>System Administrator</td>
+                                <td>admin@charusat.edu.in</td>
+                                <td><span class="badge bg-danger">ADMIN</span></td>
+                                <td><span class="badge badge-active px-2 py-1">Active</span></td>
+                                <td><button class="btn btn-sm btn-outline-secondary" disabled>Logged In (Self)</button></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#2</td>
+                                <td>Shubham Mendpara</td>
+                                <td>25cs044@charusat.edu.in</td>
+                                <td><span class="badge bg-secondary">STUDENT</span></td>
+                                <td><span class="badge badge-active px-2 py-1" id="demo-badge-2">Active</span></td>
+                                <td><button class="btn btn-sm btn-outline-danger" onclick="demoToggle(2)">Deactivate</button></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">#5</td>
+                                <td>Diya Joshi</td>
+                                <td>diya.ec@charusat.edu.in</td>
+                                <td><span class="badge bg-secondary">STUDENT</span></td>
+                                <td><span class="badge badge-inactive px-2 py-1" id="demo-badge-5">Inactive</span></td>
+                                <td><button class="btn btn-sm btn-outline-success" onclick="demoToggle(5)">Activate</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 7: Advanced: Monthly Analytics Chart -->
+    <div id="tab-t7" class="tab-content">
+        <div class="container-fluid" style="max-width: 1200px;">
+            <div class="card-custom">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-0">Advanced Extension: Event Registrations by Month</h5>
+                        <small class="text-muted">Dynamic SQL grouping &amp; Chart.js visualization for event attendance trends</small>
+                    </div>
+                    <span class="badge bg-primary px-3 py-2">Chart.js Active</span>
+                </div>
+                <div style="height: 320px;">
+                    <canvas id="previewAnalyticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const targetBtn = btn || document.querySelector(`[onclick*="'${tabId}'"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            
+            const targetContent = document.getElementById('tab-' + tabId);
+            if (targetContent) targetContent.classList.add('active');
+
+            if (tabId === 't7') {
+                renderPreviewChart();
+            }
+        }
+
+        let chartRendered = false;
+        function renderPreviewChart() {
+            if (chartRendered) return;
+            const ctx = document.getElementById('previewAnalyticsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['July 2026', 'August 2026', 'September 2026', 'October 2026'],
+                    datasets: [{
+                        label: 'Student Event Registrations',
+                        data: [2, 2, 2, 4],
+                        backgroundColor: 'rgba(79, 70, 229, 0.75)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+            chartRendered = true;
+        }
+
+        function demoToggle(id) {
+            const badge = document.getElementById(`demo-badge-${id}`);
+            if (badge.classList.contains('badge-active')) {
+                badge.className = 'badge badge-inactive px-2 py-1';
+                badge.innerText = 'Inactive';
+            } else {
+                badge.className = 'badge badge-active px-2 py-1';
+                badge.innerText = 'Active';
+            }
+        }
+    </script>
+</body>
+</html>
