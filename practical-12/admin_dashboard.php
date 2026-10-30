@@ -242,13 +242,21 @@ while ($row = $res->fetch_assoc()) {
         .btn-create:hover { background: #b91c1c; }
 
         .poster-thumb {
-            width: 72px;
-            height: 48px;
+            width: 80px;
+            height: 100px;
             object-fit: cover;
             border-radius: 6px;
             border: 1px solid var(--border);
             background: #f1f5f9;
             display: block;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .poster-thumb:hover {
+            transform: scale(1.6);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .poster-placeholder {

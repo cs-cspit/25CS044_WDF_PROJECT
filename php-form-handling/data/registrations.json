@@ -20,5 +20,15 @@
     "gender": "Male",
     "course": "Information Technology",
     "message": "Interested in web framework electives."
+  },
+  {
+    "registrationId": "REG-E2C555",
+    "timestamp": "2026-10-30 00:36:11",
+    "fullName": "SHUBHAM MENDPARA",
+    "email": "mendparashubham97@charusat.edu.in",
+    "phone": "9824597605",
+    "course": "Computer Engineering",
+    "year": "2nd Year",
+    "gender": "male"
   }
 ]

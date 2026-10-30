@@ -48,19 +48,23 @@
             display: block;
         }
 
-        .poster-mock {
-            width: 70px;
-            height: 48px;
+        .poster-preview-img {
+            width: 80px;
+            height: 100px;
             border-radius: 6px;
             object-fit: cover;
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+            transition: transform 0.25s ease-in-out;
+            cursor: zoom-in;
+            display: block;
+        }
+
+        .poster-preview-img:hover {
+            transform: scale(2.2);
+            z-index: 50;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
         .btn-act { padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-block; }
@@ -143,7 +147,7 @@
                 <span style="font-size:1.3rem;">✅</span>
                 <div>
                     <strong>Successful event creation:</strong><br>
-                    'AI &amp; Deep Learning Symposium' scheduled for 2026-08-25 with poster uploaded (<code>uploads/poster_ai_symposium.png</code>).
+                    'Chess Tournament: Strategy, Focus, Victory' scheduled for 2026-10-31 with poster uploaded (<code>practical-12/uploads/chess_tournament.png</code>).
                 </div>
             </div>
             <div class="card">
@@ -165,12 +169,12 @@
                         </thead>
                         <tbody>
                             <tr style="background:#f0fdf4;">
-                                <td><div class="poster-mock">🖼️ AI Poster</div></td>
-                                <td><strong>AI &amp; Deep Learning Symposium</strong></td>
-                                <td><span class="badge badge-purple">Seminar</span></td>
-                                <td>📅 2026-08-25</td>
-                                <td>📍 Seminar Hall B</td>
-                                <td>120 seats</td>
+                                <td><img src="../practical-12/uploads/chess_tournament.png" alt="Chess Tournament Poster" class="poster-preview-img"></td>
+                                <td><strong>Chess Tournament: Strategy, Focus, Victory</strong></td>
+                                <td><span class="badge badge-purple">Sports</span></td>
+                                <td>📅 2026-10-31</td>
+                                <td>📍 Dinsha Patel Sports Complex</td>
+                                <td>64 seats</td>
                                 <td><span class="badge badge-student">Active</span></td>
                             </tr>
                         </tbody>
@@ -186,7 +190,7 @@
             <div class="card">
                 <div class="card-title">
                     <h2>Event List with Uploaded Posters</h2>
-                    <small>Database Table: <code>events</code> with <code>poster_path</code></small>
+                    <small>Database Table: <code>events</code> with real college event posters (Hover to enlarge)</small>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -197,49 +201,49 @@
                                 <th>Category</th>
                                 <th>Date</th>
                                 <th>Venue</th>
-                                <th>Organizer Club</th>
+                                <th>Organizer Club / Convenor</th>
                                 <th>Capacity</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><div class="poster-mock">🖼️ Git Poster</div></td>
-                                <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
-                                <td><span class="badge badge-purple">Workshop</span></td>
-                                <td>📅 2026-07-15</td>
-                                <td>Lab 402, IT Building</td>
-                                <td>Git &amp; Open Source Club</td>
-                                <td>60 seats</td>
+                                <td><img src="../practical-12/uploads/chess_tournament.png" alt="Chess Tournament" class="poster-preview-img" title="Chess Tournament Poster"></td>
+                                <td><strong>Chess Tournament: Strategy, Focus, Victory</strong></td>
+                                <td><span class="badge badge-purple">Sports</span></td>
+                                <td>📅 2026-10-31</td>
+                                <td>📍 Dinsha Patel Sports Complex</td>
+                                <td>CSE Dept, CSPIT, CHARUSAT</td>
+                                <td>64 seats</td>
                                 <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
                             </tr>
                             <tr>
-                                <td><div class="poster-mock">🖼️ CodeVerse</div></td>
-                                <td><strong>Hackathon 2026 - CodeVerse</strong></td>
-                                <td><span class="badge badge-purple">Technical</span></td>
-                                <td>📅 2026-07-20</td>
-                                <td>Main Auditorium</td>
-                                <td>Computer Engineering Dept</td>
+                                <td><img src="../practical-12/uploads/subrata_nandi_ai.jpg" alt="Prof. Subrata Nandi AI" class="poster-preview-img" title="Endowment Chair Poster"></td>
+                                <td><strong>Endowment Chair Activity: AI &amp; Deep Learning Masterclass</strong></td>
+                                <td><span class="badge badge-purple">Seminar</span></td>
+                                <td>📅 2026-10-12</td>
+                                <td>📍 2nd Floor Seminar Hall, CSPIT</td>
+                                <td>Prof. (Dr.) Subrata Nandi (NIT Durgapur) &amp; CSE Dept</td>
                                 <td>150 seats</td>
                                 <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
                             </tr>
                             <tr>
-                                <td><div class="poster-mock">🖼️ Web Dev</div></td>
-                                <td><strong>Web Dev Seminar: Modern Fullstack</strong></td>
-                                <td><span class="badge badge-purple">Seminar</span></td>
-                                <td>📅 2026-08-05</td>
-                                <td>Seminar Hall A</td>
-                                <td>Developer Student Club</td>
+                                <td><img src="../practical-12/uploads/iot_edge_sensors.jpg" alt="IoT Edge Workshop" class="poster-preview-img" title="IoT Edge Sensors Poster"></td>
+                                <td><strong>IoT Edge: From Sensors to Smart Solutions</strong></td>
+                                <td><span class="badge badge-purple">Workshop</span></td>
+                                <td>📅 2026-11-05</td>
+                                <td>📍 Central Computing Facility</td>
+                                <td>Techymonk Automations &amp; CSE Dept</td>
                                 <td>100 seats</td>
                                 <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
                             </tr>
                             <tr>
-                                <td><div class="poster-mock">🖼️ Contest</div></td>
-                                <td><strong>Inter-College Coding Contest</strong></td>
-                                <td><span class="badge badge-purple">Competition</span></td>
-                                <td>📅 2026-08-18</td>
-                                <td>Computing Facility</td>
-                                <td>Competitive Programming Club</td>
+                                <td><img src="../practical-12/uploads/theory_of_computation.png" alt="Theory of Computation" class="poster-preview-img" title="Theory of Computation Poster"></td>
+                                <td><strong>Applications of Theory of Computation</strong></td>
+                                <td><span class="badge badge-purple">Expert Lecture</span></td>
+                                <td>📅 2026-10-07</td>
+                                <td>📍 Seminar Hall, 1st Floor, A6 Building</td>
+                                <td>Dr. Rohit Kumar (SVNIT Surat) &amp; CSE Dept</td>
                                 <td>120 seats</td>
                                 <td><span class="btn-act btn-act-blue">Edit</span> <span class="btn-act btn-act-red">Delete</span></td>
                             </tr>
@@ -257,7 +261,7 @@
                 <span style="font-size:1.3rem;">✅</span>
                 <div>
                     <strong>Successful event update:</strong><br>
-                    'Git &amp; GitHub Hands-on Workshop' details refreshed successfully. Venue updated to <em>"Auditorium 1, Ground Floor"</em> and capacity increased to <em>80 seats</em>.
+                    'Applications of Theory of Computation' details refreshed successfully. Venue updated to <em>"Auditorium 2, CSPIT"</em> and capacity increased to <em>150 seats</em>.
                 </div>
             </div>
             <div class="card">
@@ -277,11 +281,11 @@
                         </thead>
                         <tbody>
                             <tr style="background:#eff6ff;">
-                                <td><div class="poster-mock">🖼️ Git Poster</div></td>
-                                <td><strong>Git &amp; GitHub Hands-on Workshop</strong></td>
-                                <td><strong>Auditorium 1, Ground Floor</strong> (Updated)</td>
-                                <td><strong>80 seats</strong> (Updated)</td>
-                                <td><small>2026-10-30 13:25:00</small></td>
+                                <td><img src="../practical-12/uploads/theory_of_computation.png" alt="Theory of Computation Poster" class="poster-preview-img"></td>
+                                <td><strong>Applications of Theory of Computation</strong></td>
+                                <td><strong>Auditorium 2, CSPIT</strong> (Updated)</td>
+                                <td><strong>150 seats</strong> (Updated)</td>
+                                <td><small>2026-10-30 15:30:00</small></td>
                             </tr>
                         </tbody>
                     </table>
@@ -297,7 +301,7 @@
                 <span style="font-size:1.3rem;">✅</span>
                 <div>
                     <strong>Successful event deletion:</strong><br>
-                    Event #4 ('Inter-College Coding Contest') was permanently removed from database and associated poster unlinked.
+                    Event #4 was permanently removed from database and associated poster unlinked.
                 </div>
             </div>
             <div class="card">
@@ -308,6 +312,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Poster</th>
                                 <th>Event ID</th>
                                 <th>Event Name</th>
                                 <th>Organizer</th>
@@ -316,21 +321,24 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td><img src="../practical-12/uploads/chess_tournament.png" class="poster-preview-img"></td>
                                 <td>#1</td>
-                                <td>Git &amp; GitHub Hands-on Workshop</td>
-                                <td>Git &amp; Open Source Club</td>
+                                <td>Chess Tournament: Strategy, Focus, Victory</td>
+                                <td>CSE Dept, CSPIT</td>
                                 <td><span class="badge badge-student">Active</span></td>
                             </tr>
                             <tr>
+                                <td><img src="../practical-12/uploads/subrata_nandi_ai.jpg" class="poster-preview-img"></td>
                                 <td>#2</td>
-                                <td>Hackathon 2026 - CodeVerse</td>
-                                <td>Computer Engineering Dept</td>
+                                <td>Endowment Chair Activity: AI &amp; Deep Learning Masterclass</td>
+                                <td>Prof. (Dr.) Subrata Nandi</td>
                                 <td><span class="badge badge-student">Active</span></td>
                             </tr>
                             <tr>
+                                <td><img src="../practical-12/uploads/iot_edge_sensors.jpg" class="poster-preview-img"></td>
                                 <td>#3</td>
-                                <td>Web Dev Seminar: Modern Fullstack</td>
-                                <td>Developer Student Club</td>
+                                <td>IoT Edge: From Sensors to Smart Solutions</td>
+                                <td>Techymonk Automations</td>
                                 <td><span class="badge badge-student">Active</span></td>
                             </tr>
                         </tbody>
@@ -348,18 +356,26 @@
                     <h2>Valid Poster Upload Validation</h2>
                     <span class="badge badge-student">PASS</span>
                 </div>
-                <div class="alert alert-success">
-                    <span>✅</span>
+                <div style="display:flex; gap:20px; align-items:center; margin-bottom:18px;">
+                    <img src="../practical-12/uploads/chess_tournament.png" alt="Valid Poster Preview" style="width:120px; height:150px; object-fit:cover; border-radius:8px; border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.1);">
                     <div>
-                        <strong>Poster Verified:</strong> <code>codeverse_banner.png</code> (Size: 480 KB &bull; MIME: <code>image/png</code>).<br>
-                        Cryptographically stored at <code>practical-12/uploads/poster_1761828000_a4f10b.png</code>.
+                        <div class="alert alert-success" style="margin-bottom:10px;">
+                            <span>✅</span>
+                            <div>
+                                <strong>Poster Verified:</strong> <code>chess_tournament.png</code><br>
+                                Size: 983 KB &bull; MIME: <code>image/png</code> &bull; Status: Valid
+                            </div>
+                        </div>
+                        <p style="font-size:0.86rem; color:var(--text-muted);">
+                            Stored securely at <code>practical-12/uploads/chess_tournament.png</code> using sanitized filename.
+                        </p>
                     </div>
                 </div>
                 <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px;">
                     <strong>Security Verification Checklist:</strong><br>
                     &bull; <strong>Extension match:</strong> <code>png</code> &isin; <code>['jpg', 'jpeg', 'png', 'webp']</code><br>
                     &bull; <strong>MIME type detection:</strong> <code>finfo_file()</code> returned <code>image/png</code><br>
-                    &bull; <strong>Size verification:</strong> 491,520 bytes &lt; 2,097,152 bytes (2 MB limit)<br>
+                    &bull; <strong>Size verification:</strong> 1,007,416 bytes &lt; 2,097,152 bytes (2 MB limit)<br>
                     &bull; <strong>Target directory:</strong> Moved via <code>move_uploaded_file()</code>
                 </div>
             </div>
@@ -419,7 +435,7 @@
                 <span style="font-size:1.4rem;">✅</span>
                 <div>
                     <strong>Success Message:</strong><br>
-                    Successful event creation: 'Hackathon 2026 - CodeVerse' scheduled with poster uploaded.
+                    Successful event creation: 'Chess Tournament: Strategy, Focus, Victory' scheduled with poster uploaded.
                 </div>
             </div>
             <div class="alert alert-danger" style="margin-top:20px;">
