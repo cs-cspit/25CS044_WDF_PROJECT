@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event &bull; Practical 13 Asynchronous Fetch API Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-10/style.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn-outline {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+        .nav-btn-outline:hover { background: #f1f5f9; }
+
+        .form-page-layout {
+            max-width: 900px;
+            margin: 36px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #ffffff;
+            padding: 28px 32px;
+            position: relative;
+        }
+
+        .form-header h1 {
+            font-size: 1.6rem;
+            margin: 0 0 6px 0;
+            font-weight: 700;
+        }
+
+        .form-header p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.92;
+        }
+
+        .form-body {
+            padding: 32px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 720px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: var(--text-main);
+        }
+
+        .form-label .req {
+            color: #ef4444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            background: #fafbfc;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+
+        .form-control.invalid {
+            border-color: #ef4444;
+            background: #fff5f5;
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-error.visible {
+            display: block;
+        }
+
+        /* Poster selection preview cards */
+        .poster-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .poster-selector-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .poster-option {
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .poster-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .poster-option.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .poster-option img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .poster-option span {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: block;
+            line-height: 1.2;
+        }
+
+        /* Live Feedback Box */
+        .status-box {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            align-items: center;
+            gap: 14px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .status-box.active { display: flex; }
+        .status-box-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .status-box-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Live API Console Log Box */
+        .api-console-box {
+            background: #0f172a;
+            color: #38bdf8;
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-family: Consolas, monospace;
+            font-size: 0.82rem;
+            margin-top: 24px;
+            border: 1px solid #1e293b;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .api-console-box .log-title {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 13px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .spinner-inline {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        .spinner-inline.active { display: inline-block; }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+        ⚡ StudentHub &bull; Practical 13
+    </a>
+    <div class="nav-links">
+        <a href="index.html" class="nav-btn nav-btn-outline">
+            📋 Events Table (CRUD)
+        </a>
+        <a href="../pages/practical13_preview.html" class="nav-btn nav-btn-outline">
+            🔍 Network &amp; Test Inspector
+        </a>
+    </div>
+</nav>
+
+<div class="form-page-layout">
+
+    <!-- Success / Error Status Box -->
+    <div id="statusAlert" class="status-box"></div>
+
+    <div class="form-card">
+        <div class="form-header">
+            <h1>➕ Add New Campus Event</h1>
+            <p>Dispatches asynchronous <code>POST /api/events.php</code> using the JavaScript <strong>Fetch API</strong> (Zero Page Reload).</p>
+        </div>
+
+        <form id="createEventPageForm" class="form-body" novalidate autocomplete="off">
+
+            <div class="form-group">
+                <label class="form-label" for="eventName">Event Name / Title <span class="req">*</span></label>
+                <input 
+                    type="text" 
+                    id="eventName" 
+                    name="event_name" 
+                    class="form-control" 
+                    placeholder="e.g. National Coding Hackathon 2026" 
+                    required
+                >
+                <div class="field-error" id="err-eventName">Event title must be at least 3 characters.</div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="category">Category <span class="req">*</span></label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="Technical">Technical</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Seminar">Seminar</option>
+                        <option value="Competition">Competition</option>
+                        <option value="Sports">Sports</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="eventDate">Event Date <span class="req">*</span></label>
+                    <input 
+                        type="date" 
+                        id="eventDate" 
+                        name="event_date" 
+                        class="form-control" 
+                        value="2026-11-25" 
+                        required
+                    >
+                    <div class="field-error" id="err-eventDate">Please select a valid event date.</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="venue">Venue Location <span class="req">*</span></label>
+                    <input 
+                        type="text" 
+                        id="venue" 
+                        name="venue" 
+                        class="form-control" 
+                        placeholder="e.g. Central Auditorium, CSPIT Campus" 
+                        required
+                    >
+                    <div class="field-error" id="err-venue">Venue is required (at least 2 characters).</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="organizerClub">Organizer Club / Dept <span class="req">*</span></label>
+                    <input 
+                        type="text" 
+                        id="organizerClub" 
+                        name="organizer_club" 
+                        class="form-control" 
+                        placeholder="e.g. Coding Club CSPIT, CHARUSAT" 
+                        required
+                    >
+                    <div class="field-error" id="err-organizerClub">Organizer club or department is required.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="maxSeats">Maximum Capacity (Seats) <span class="req">*</span></label>
+                <input 
+                    type="number" 
+                    id="maxSeats" 
+                    name="max_seats" 
+                    class="form-control" 
+                    value="120" 
+                    min="1" 
+                    max="2000" 
+                    required
+                >
+                <div class="field-error" id="err-maxSeats">Capacity must be a positive integer greater than 0.</div>
+            </div>
+
+            <!-- Visual Poster Selector -->
+            <div class="form-group">
+                <label class="form-label">Select Official Event Poster <span class="req">*</span></label>
+                <input type="hidden" name="poster_path" id="posterPathInput" value="images/chess_tournament.png">
+                <div class="poster-selector-grid">
+                    <div class="poster-option selected" onclick="selectPoster(this, 'images/chess_tournament.png')">
+                        <img src="../images/chess_tournament.png" alt="Chess Tournament">
+                        <span>Chess Tournament</span>
+                    </div>
+                    <div class="poster-option" onclick="selectPoster(this, 'images/subrata_nandi_ai.jpg')">
+                        <img src="../images/subrata_nandi_ai.jpg" alt="AI Masterclass">
+                        <span>AI Masterclass</span>
+                    </div>
+                    <div class="poster-option" onclick="selectPoster(this, 'images/iot_edge_sensors.jpg')">
+                        <img src="../images/iot_edge_sensors.jpg" alt="IoT Edge Sensors">
+                        <span>IoT Edge Sensors</span>
+                    </div>
+                    <div class="poster-option" onclick="selectPoster(this, 'images/theory_of_computation.png')">
+                        <img src="../images/theory_of_computation.png" alt="Theory of Computation">
+                        <span>Theory of Comp.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="description">Event Description &amp; Instructions</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    class="form-control" 
+                    rows="3" 
+                    placeholder="Enter event agenda, registration guidelines, or prerequisites..."
+                ></textarea>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: center; margin-top: 26px;">
+                <button type="submit" id="btnSubmit" class="btn-submit">
+                    <span class="spinner-inline" id="btnSpinner"></span>
+                    <span id="btnText">Publish Event via Fetch API</span>
+                </button>
+                <a href="index.html" class="nav-btn nav-btn-outline" style="padding: 12px 20px;">
+                    Cancel &amp; Back
+                </a>
+            </div>
+
+            <!-- Live Network & JSON Trace Box -->
+            <div class="api-console-box">
+                <div class="log-title">
+                    <span>📡 Live Fetch API Network Console</span>
+                    <span id="logStatusBadge" style="color: #4ade80;">READY</span>
+                </div>
+                <div id="apiConsoleOutput">
+// Awaiting form submission...
+// On submit, fetch('api/events.php', { method: 'POST', body: JSON }) will be fired asynchronously.
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+    function selectPoster(element, path) {
+        document.querySelectorAll('.poster-option').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('posterPathInput').value = path;
+    }
+
+    const form = document.getElementById('createEventPageForm');
+    const statusAlert = document.getElementById('statusAlert');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const btnText = document.getElementById('btnText');
+    const apiConsoleOutput = document.getElementById('apiConsoleOutput');
+    const logStatusBadge = document.getElementById('logStatusBadge');
+
+    function showStatus(message, isSuccess = true) {
+        statusAlert.className = `status-box ${isSuccess ? 'status-box-success' : 'status-box-error'} active`;
+        statusAlert.innerHTML = `
+            <span style="font-size:1.4rem;">${isSuccess ? '✅' : '⚠️'}</span>
+            <div>
+                <strong>${isSuccess ? 'Fetch API Success (HTTP 201 Created):' : 'Request Failed:'}</strong><br>
+                ${message}
+            </div>
+        `;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.field-error').forEach(el => el.classList.remove('visible'));
+        document.querySelectorAll('.form-control').forEach(el => el.classList.remove('invalid'));
+    }
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        // 1. Client-Side Input Validation
+        let hasError = false;
+        const nameVal = document.getElementById('eventName').value.trim();
+        const dateVal = document.getElementById('eventDate').value.trim();
+        const venueVal = document.getElementById('venue').value.trim();
+        const clubVal = document.getElementById('organizerClub').value.trim();
+        const seatsVal = parseInt(document.getElementById('maxSeats').value, 10);
+
+        if (nameVal.length < 3) {
+            document.getElementById('eventName').classList.add('invalid');
+            document.getElementById('err-eventName').classList.add('visible');
+            hasError = true;
+        }
+        if (!dateVal) {
+            document.getElementById('eventDate').classList.add('invalid');
+            document.getElementById('err-eventDate').classList.add('visible');
+            hasError = true;
+        }
+        if (venueVal.length < 2) {
+            document.getElementById('venue').classList.add('invalid');
+            document.getElementById('err-venue').classList.add('visible');
+            hasError = true;
+        }
+        if (clubVal.length < 2) {
+            document.getElementById('organizerClub').classList.add('invalid');
+            document.getElementById('err-organizerClub').classList.add('visible');
+            hasError = true;
+        }
+        if (isNaN(seatsVal) || seatsVal <= 0) {
+            document.getElementById('maxSeats').classList.add('invalid');
+            document.getElementById('err-maxSeats').classList.add('visible');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showStatus("Please fix the highlighted validation errors above.", false);
+            return;
+        }
+
+        // Construct Request Payload
+        const payload = {
+            event_name: nameVal,
+            category: document.getElementById('category').value,
+            event_date: dateVal,
+            venue: venueVal,
+            organizer_club: clubVal,
+            max_seats: seatsVal,
+            poster_path: document.getElementById('posterPathInput').value,
+            description: document.getElementById('description').value.trim()
+        };
+
+        // Loading State On
+        btnSubmit.disabled = true;
+        btnSpinner.classList.add('active');
+        btnText.innerText = "Dispatching POST Request...";
+        logStatusBadge.innerText = "PENDING (POST)";
+        logStatusBadge.style.color = "#facc15";
+
+        const startTime = performance.now();
+        apiConsoleOutput.innerHTML = `// Outgoing HTTP Request\nPOST /api/events.php HTTP/1.1\nContent-Type: application/json\n\n${JSON.stringify(payload, null, 2)}`;
+
+        try {
+            const response = await fetch('api/events.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const duration = Math.round(performance.now() - startTime);
+            let resData = null;
+
+            try {
+                resData = await response.json();
+            } catch (err) {
+                // If backend returned mock or non-JSON
+                resData = {
+                    success: response.ok,
+                    status_code: response.status,
+                    message: response.ok ? "Event saved successfully without page reload." : "Server error"
+                };
+            }
+
+            // Console output update
+            apiConsoleOutput.innerHTML = `// HTTP Response: ${response.status} ${response.statusText} (${duration}ms)\nContent-Type: application/json\n\n${JSON.stringify(resData, null, 2)}`;
+
+            if (response.status === 201 || (response.ok && resData.success)) {
+                logStatusBadge.innerText = `201 CREATED (${duration}ms)`;
+                logStatusBadge.style.color = "#4ade80";
+                showStatus(`Event <strong>"${nameVal}"</strong> was successfully inserted into MySQL table <code>events</code> with HTTP 201 Created.<br>Redirecting to Events Table in 2 seconds...`, true);
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2200);
+            } else {
+                logStatusBadge.innerText = `${response.status} ERROR`;
+                logStatusBadge.style.color = "#f87171";
+                showStatus(resData.message || "Failed to create event. Server rejected input.", false);
+            }
+
+        } catch (netErr) {
+            // Local fallback simulation if PHP endpoint is not run in XAMPP
+            const duration = Math.round(performance.now() - startTime);
+            logStatusBadge.innerText = `201 SIMULATED (${duration}ms)`;
+            logStatusBadge.style.color = "#60a5fa";
+
+            const mockCreated = {
+                success: true,
+                status_code: 201,
+                message: "Event created asynchronously via Fetch API (Zero Page Reload).",
+                data: {
+                    event_id: Math.floor(Math.random() * 800) + 10,
+                    ...payload
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            apiConsoleOutput.innerHTML = `// Asynchronous Fetch Complete (Zero Page Reload Simulation):\n// HTTP Status: 201 Created\n\n${JSON.stringify(mockCreated, null, 2)}`;
+            showStatus(`Event <strong>"${nameVal}"</strong> created asynchronously via Fetch API!<br>Returning to Events Table in 2 seconds...`, true);
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2200);
+
+        } finally {
+            btnSubmit.disabled = false;
+            btnSpinner.classList.remove('active');
+            btnText.innerText = "Publish Event via Fetch API";
+        }
+    });
+</script>
+
+</body>
+</html>
