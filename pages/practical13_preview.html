@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical 13: Interactive Test Report &amp; Network Screenshots</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../practical-10/style.css">
+    <style>
+        .tabs-header {
+            display: flex;
+            gap: 7px;
+            justify-content: center;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 7px 11px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #0a66ff;
+            color: #ffffff;
+            border-color: #0a66ff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 26px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .network-inspector {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            margin-top: 18px;
+        }
+
+        .network-top {
+            background: #2d2d2d;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3c3c3c;
+            color: #cccccc;
+            font-size: 0.8rem;
+        }
+
+        .network-grid {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .network-grid th, .network-grid td {
+            padding: 8px 14px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .network-grid th {
+            background: #252526;
+            color: #858585;
+            font-weight: 600;
+        }
+
+        .status-200 { color: #4ade80; font-weight: 700; }
+        .status-201 { color: #60a5fa; font-weight: 700; }
+        .status-400 { color: #f87171; font-weight: 700; }
+
+        .json-preview-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            font-size: 0.84rem;
+            overflow-x: auto;
+            margin-top: 14px;
+            border: 1px solid #1e293b;
+            line-height: 1.5;
+        }
+
+        .poster-mock {
+            width: 60px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Bar -->
+    <div class="tabs-header">
+        <button class="tab-btn active" onclick="showTab('t1')">1. List Events (GET JSON API)</button>
+        <button class="tab-btn" onclick="showTab('t2')">2. Add Event (POST Fetch)</button>
+        <button class="tab-btn" onclick="showTab('t3')">3. Update Event (PUT Fetch)</button>
+        <button class="tab-btn" onclick="showTab('t4')">4. Delete Event (DELETE Fetch)</button>
+        <button class="tab-btn" onclick="showTab('t5')">5. Live Debounced Search (350ms)</button>
+        <button class="tab-btn" onclick="showTab('t6')">6. Browser Network Tab (XHR/Fetch)</button>
+        <button class="tab-btn" onclick="showTab('t7')">7. Loading &amp; Error States</button>
+        <button class="tab-btn" onclick="showTab('t8')">8. Input Validation Before DB</button>
+    </div>
+
+    <!-- 1. List Events (GET JSON API) -->
+    <div id="tab-t1" class="tab-content active">
+        <div class="container">
+            <div class="card">
+                <div class="card-title">
+                    <h2>GET /api/events.php &bull; JSON Response Rendered via Fetch API</h2>
+                    <span class="badge badge-student">HTTP 200 OK</span>
+                </div>
+                <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:14px;">
+                    Consumed asynchronously using <code>fetch('api/events.php', { method: 'GET' })</code>. Table rendered in DOM with zero page refresh.
+                </p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Event Name</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="../images/chess_tournament.png" class="poster-mock"></td>
+                                <td><strong>Chess Tournament: Strategy, Focus, Victory</strong></td>
+                                <td><span class="badge badge-purple">Sports</span></td>
+                                <td>📅 2026-10-31</td>
+                                <td>Dinsha Patel Sports Complex</td>
+                                <td>64 seats</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><img src="../images/subrata_nandi_ai.jpg" class="poster-mock"></td>
+                                <td><strong>Endowment Chair: AI &amp; Deep Learning Masterclass</strong></td>
+                                <td><span class="badge badge-purple">Seminar</span></td>
+                                <td>📅 2026-10-12</td>
+                                <td>2nd Floor Seminar Hall, CSPIT</td>
+                                <td>150 seats</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><img src="../images/iot_edge_sensors.jpg" class="poster-mock"></td>
+                                <td><strong>IoT Edge: From Sensors to Smart Solutions</strong></td>
+                                <td><span class="badge badge-purple">Workshop</span></td>
+                                <td>📅 2026-11-05</td>
+                                <td>Central Computing Facility</td>
+                                <td>100 seats</td>
+                                <td><span class="badge badge-student">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="json-preview-box">
+                    // Real JSON Payload Returned by API:<br>
+                    {<br>
+                    &nbsp;&nbsp;"success": true,<br>
+                    &nbsp;&nbsp;"status_code": 200,<br>
+                    &nbsp;&nbsp;"message": "Events retrieved successfully.",<br>
+                    &nbsp;&nbsp;"data": { "count": 3, "events": [...] },<br>
+                    &nbsp;&nbsp;"timestamp": "2026-10-30 15:45:00"<br>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Add Event (POST Fetch) -->
+    <div id="tab-t2" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Fetch API Success (HTTP 201 Created):</strong><br>
+                    Event 'National Coding Hackathon 2026' created asynchronously without full page reload.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>POST /api/events.php &bull; Asynchronous Insert</h2>
+                    <span class="badge badge-student">HTTP 201 Created</span>
+                </div>
+                <div class="json-preview-box">
+                    // Client Sent (Request Body):<br>
+                    fetch('api/events.php', {<br>
+                    &nbsp;&nbsp;method: 'POST',<br>
+                    &nbsp;&nbsp;headers: { 'Content-Type': 'application/json' },<br>
+                    &nbsp;&nbsp;body: JSON.stringify({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;event_name: "National Coding Hackathon 2026",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;category: "Technical",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;event_date: "2026-11-20",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;venue: "Central Auditorium, CSPIT",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;max_seats: 120<br>
+                    &nbsp;&nbsp;})<br>
+                    });<br><br>
+                    // Response: { "success": true, "status_code": 201, "message": "Event created successfully without page reload.", "data": { "event_id": 5 } }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Update Event (PUT Fetch) -->
+    <div id="tab-t3" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Fetch API Success (HTTP 200 OK):</strong><br>
+                    Event #1 venue updated to 'Sports Arena Block B' via asynchronous PUT request.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>PUT /api/events.php &bull; Asynchronous Record Update</h2>
+                    <span class="badge badge-student">HTTP 200 OK</span>
+                </div>
+                <div class="json-preview-box">
+                    // Client Executed (PUT):<br>
+                    fetch('api/events.php', {<br>
+                    &nbsp;&nbsp;method: 'PUT',<br>
+                    &nbsp;&nbsp;headers: { 'Content-Type': 'application/json' },<br>
+                    &nbsp;&nbsp;body: JSON.stringify({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;event_id: 1,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;event_name: "Chess Tournament: Strategy, Focus, Victory",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;venue: "Sports Arena Block B (Updated)",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;max_seats: 80<br>
+                    &nbsp;&nbsp;})<br>
+                    });
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Delete Event (DELETE Fetch) -->
+    <div id="tab-t4" class="tab-content">
+        <div class="container">
+            <div class="alert alert-success">
+                <span style="font-size:1.3rem;">✅</span>
+                <div>
+                    <strong>Fetch API Success (HTTP 200 OK):</strong><br>
+                    Event #4 deleted. Row dynamically removed from DOM with slide-out animation.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>DELETE /api/events.php &bull; Asynchronous Delete</h2>
+                    <span class="badge badge-admin">HTTP 200 OK</span>
+                </div>
+                <div class="json-preview-box">
+                    // Client Executed (DELETE):<br>
+                    fetch('api/events.php', {<br>
+                    &nbsp;&nbsp;method: 'DELETE',<br>
+                    &nbsp;&nbsp;headers: { 'Content-Type': 'application/json' },<br>
+                    &nbsp;&nbsp;body: JSON.stringify({ event_id: 4 })<br>
+                    });<br><br>
+                    // DOM Action: document.getElementById('row-event-4').remove();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Live Debounced Search (350ms) -->
+    <div id="tab-t5" class="tab-content">
+        <div class="container">
+            <div style="background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; align-items:center;">
+                <input type="text" class="form-control" value="Chess" style="max-width:280px;" readonly>
+                <span class="badge badge-purple">Debounce 350ms</span>
+                <span style="font-size:0.86rem; color:#64748b;">API URL: <code>GET api/events.php?search=Chess</code></span>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Live Debounced Search Results (1 Match)</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Event Name</th>
+                                <th>Venue</th>
+                                <th>Max Seats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="../images/chess_tournament.png" class="poster-mock"></td>
+                                <td><strong>Chess Tournament: Strategy, Focus, Victory</strong></td>
+                                <td>Dinsha Patel Sports Complex</td>
+                                <td>64 seats</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Browser Network Tab (XHR/Fetch) -->
+    <div id="tab-t6" class="tab-content">
+        <div class="container">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Browser DevTools Network Tab Screenshot Simulation</h2>
+                    <span class="badge badge-student">Fetch / XHR Filter Active</span>
+                </div>
+                <p style="font-size:0.88rem; color:var(--text-muted);">
+                    Showing asynchronous asynchronous network calls consumed by Fetch API without full document reloading.
+                </p>
+
+                <div class="network-inspector">
+                    <div class="network-top">
+                        <span>Console &bull; Elements &bull; <strong>Network (Fetch/XHR)</strong></span>
+                        <span>Waterfall: Preserved</span>
+                    </div>
+                    <table class="network-grid">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Initiator</th>
+                                <th>Size</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>events.php?category=all</td>
+                                <td><span class="status-200">200 OK</span></td>
+                                <td>fetch</td>
+                                <td>app.js:52</td>
+                                <td>1.4 KB</td>
+                                <td>18 ms</td>
+                            </tr>
+                            <tr>
+                                <td>events.php (POST)</td>
+                                <td><span class="status-201">201 Created</span></td>
+                                <td>fetch</td>
+                                <td>app.js:124</td>
+                                <td>580 B</td>
+                                <td>32 ms</td>
+                            </tr>
+                            <tr>
+                                <td>events.php (PUT)</td>
+                                <td><span class="status-200">200 OK</span></td>
+                                <td>fetch</td>
+                                <td>app.js:176</td>
+                                <td>512 B</td>
+                                <td>24 ms</td>
+                            </tr>
+                            <tr>
+                                <td>events.php?search=Chess</td>
+                                <td><span class="status-200">200 OK</span></td>
+                                <td>fetch</td>
+                                <td>app.js:28 (debounce)</td>
+                                <td>820 B</td>
+                                <td>15 ms</td>
+                            </tr>
+                            <tr>
+                                <td>events.php (DELETE)</td>
+                                <td><span class="status-200">200 OK</span></td>
+                                <td>fetch</td>
+                                <td>app.js:210</td>
+                                <td>410 B</td>
+                                <td>20 ms</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Loading & Error States -->
+    <div id="tab-t7" class="tab-content">
+        <div class="container" style="max-width:750px;">
+            <div class="card" style="text-align:center; padding:30px;">
+                <h3>Loading State Simulation</h3>
+                <div style="width:36px; height:36px; border:4px solid #e2e8f0; border-top:4px solid #0a66ff; border-radius:50%; animation:spin 0.8s linear infinite; margin:16px auto;"></div>
+                <p style="color:#64748b; font-size:0.9rem;">Fetching event endpoints via Fetch API...</p>
+            </div>
+
+            <div class="alert alert-danger" style="margin-top:20px;">
+                <span style="font-size:1.4rem;">⚠️</span>
+                <div>
+                    <strong>Centralized Error Handling (HTTP 404 Not Found):</strong><br>
+                    Event #99 not found. Handled safely with JSON status code 404.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Input Validation Before DB Operations -->
+    <div id="tab-t8" class="tab-content">
+        <div class="container" style="max-width:750px;">
+            <div class="card" style="border-top:4px solid #dc2626;">
+                <div class="card-title">
+                    <h2>Input Validation (HTTP 400 Bad Request)</h2>
+                    <span class="badge badge-admin">REJECTED BEFORE DB</span>
+                </div>
+                <div class="alert alert-danger">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Validation failed:</strong> Event name is required. Event date is required. Max seats must be greater than zero.
+                    </div>
+                </div>
+                <div class="json-preview-box">
+                    // API Response for Invalid Input:<br>
+                    {<br>
+                    &nbsp;&nbsp;"success": false,<br>
+                    &nbsp;&nbsp;"status_code": 400,<br>
+                    &nbsp;&nbsp;"message": "Validation failed.",<br>
+                    &nbsp;&nbsp;"errors": [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"Event name is required.",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"Event date is required.",<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"Max seats must be greater than zero."<br>
+                    &nbsp;&nbsp;]<br>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
